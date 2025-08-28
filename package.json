@@ -25,10 +25,14 @@
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@babel/preset-typescript": "^7.27.1",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/react-native": "^13.3.3",
+    "@types/jest": "^30.0.0",
     "@types/react": "^19.1.12",
     "@types/react-native": "^0.72.8",
     "@typescript-eslint/eslint-plugin": "^8.41.0",
     "@typescript-eslint/parser": "^8.41.0",
+    "babel-preset-expo": "^13.2.4",
     "eslint": "^9.34.0",
     "eslint-config-expo": "^9.2.0",
     "eslint-config-prettier": "^10.1.8",
@@ -36,7 +40,11 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-native": "^5.0.0",
+    "jest": "^30.1.1",
+    "jest-expo": "^53.0.9",
     "prettier": "^3.6.2",
+    "react-test-renderer": "^19.1.1",
+    "ts-jest": "^29.4.1",
     "typescript": "^5.9.2"
   },
   "private": true

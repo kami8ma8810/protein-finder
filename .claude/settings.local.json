@@ -1,0 +1,24 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__serena-mcp-server__activate_project",
+      "Bash(npx create-expo-app:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(tree:*)",
+      "Bash(npx tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(git commit:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npm test:*)",
+      "WebFetch(domain:docs.expo.dev)",
+      "Bash(npx jest:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
