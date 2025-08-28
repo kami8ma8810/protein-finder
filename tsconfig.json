@@ -1,0 +1,70 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["ESNext"],
+    "jsx": "react-native",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    
+    /* Strict Type Checking */
+    "strict": true,
+    "noImplicitAny": true,                 /* any型の暗黙的使用を禁止 */
+    "strictNullChecks": true,               /* null/undefinedの厳格なチェック */
+    "strictFunctionTypes": true,            /* 関数型の厳格なチェック */
+    "strictBindCallApply": true,            /* bind/call/applyの厳格なチェック */
+    "strictPropertyInitialization": true,   /* プロパティ初期化の厳格なチェック */
+    "noImplicitThis": true,                 /* thisの暗黙的なany型を禁止 */
+    "alwaysStrict": true,                   /* 常にstrictモードで実行 */
+    
+    /* Additional Checks */
+    "noUnusedLocals": true,                 /* 未使用のローカル変数をエラーに */
+    "noUnusedParameters": true,             /* 未使用のパラメータをエラーに */
+    "noImplicitReturns": true,              /* すべてのコードパスで値を返すことを強制 */
+    "noFallthroughCasesInSwitch": true,     /* switch文のフォールスルーを防ぐ */
+    "noUncheckedIndexedAccess": true,       /* インデックスアクセス時にundefinedチェックを強制 */
+    
+    /* Module Resolution */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@core/*": ["src/core/*"],
+      "@domain/*": ["src/core/domain/*"],
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@presentation/*": ["src/presentation/*"],
+      "@components/*": ["src/presentation/components/*"],
+      "@screens/*": ["src/presentation/screens/*"],
+      "@stores/*": ["src/presentation/stores/*"],
+      "@utils/*": ["src/utils/*"],
+      "@assets/*": ["assets/*"],
+      "@tests/*": ["__tests__/*"]
+    },
+    
+    /* Emit */
+    "skipLibCheck": true,                   /* 型定義ファイルのチェックをスキップ（ビルド高速化） */
+    "resolveJsonModule": true,              /* JSONファイルのimportを許可 */
+    "esModuleInterop": true,                /* CommonJSとESModulesの相互運用性 */
+    "allowSyntheticDefaultImports": true,   /* default exportがない場合も許可 */
+    "forceConsistentCasingInFileNames": true, /* ファイル名の大文字小文字を厳格にチェック */
+    
+    /* Experimental */
+    "experimentalDecorators": true,         /* デコレータのサポート */
+    "emitDecoratorMetadata": true           /* デコレータのメタデータ出力 */
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js",
+    ".expo",
+    "dist",
+    "coverage"
+  ]
+}
