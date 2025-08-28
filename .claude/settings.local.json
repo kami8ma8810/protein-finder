@@ -16,7 +16,8 @@
       "Bash(npm uninstall:*)",
       "Bash(npm test:*)",
       "WebFetch(domain:docs.expo.dev)",
-      "Bash(npx jest:*)"
+      "Bash(npx jest:*)",
+      "Bash(npx expo install:*)"
     ],
     "deny": [],
     "ask": []
