@@ -8,5 +8,6 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@core/(.*)$': '<rootDir>/src/core/$1',
     '^@domain/(.*)$': '<rootDir>/src/core/domain/$1',
+    '^expo-sqlite$': '<rootDir>/src/infrastructure/database/__mocks__/expo-sqlite.ts',
   },
 };
