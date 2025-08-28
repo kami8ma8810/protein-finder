@@ -17,7 +17,9 @@
       "Bash(npm test:*)",
       "WebFetch(domain:docs.expo.dev)",
       "Bash(npx jest:*)",
-      "Bash(npx expo install:*)"
+      "Bash(npx expo install:*)",
+      "WebFetch(domain:reactnative.dev)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
