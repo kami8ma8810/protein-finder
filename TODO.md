@@ -33,19 +33,25 @@
   - [ ] LoadingSpinner
   - [ ] ErrorBoundary
 
-### Screens
-- [ ] Menu List Screen
-  - [ ] FlashList implementation
-  - [ ] Search functionality
-  - [ ] Filter by chain
-  - [ ] Filter by protein amount
-  - [ ] Sort options
+### Screens (Priority Order)
+- [ ] Store List Screen (Priority 1)
+  - [ ] Display available chains
+  - [ ] Search store functionality
+  - [ ] Store logos and info
+- [ ] Store Menu Screen (Priority 2)
+  - [ ] Display menu for selected store
+  - [ ] Sort by protein/calories/PFC
+  - [ ] Category filter
   - [ ] Pull to refresh
-- [ ] Menu Detail Screen
+- [ ] Menu Detail Screen (Priority 3)
   - [ ] Nutrition display
   - [ ] Source URL link
   - [ ] Share functionality
   - [ ] Last updated date
+- [ ] Cross-Store Search Screen (Priority 4)
+  - [ ] Search by menu name
+  - [ ] Compare across stores
+  - [ ] Filter by nutrients
 - [ ] Settings Screen
   - [ ] Push notification toggles
   - [ ] Data policy

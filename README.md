@@ -4,13 +4,27 @@ A mobile application for searching and comparing protein content from official n
 
 [日本語版はこちら](./README.ja.md)
 
+## Main Use Cases
+
+### Use Case A: Store-specific Menu Search (Primary)
+"I'm going to Sukiya today, want to know high-protein menu items"
+1. Select "Sukiya" from store list
+2. View Sukiya's menu sorted by protein content
+3. Re-sort by PFC balance or price
+
+### Use Case B: Cross-store Menu Search (Secondary)
+"Want to eat gyudon, which store has the highest protein?"
+1. Search "gyudon" by menu name
+2. Compare gyudon from all stores
+3. Find the optimal choice by protein content
+
 ## Features
 
-- 🔍 **Smart Search**: Search menu items by protein content, chain, and nutritional criteria
-- 📊 **Nutritional Comparison**: Compare items by "per serving" or "per 100g"
+- 🏪 **Store View**: Select a store to view its menu
+- 🔍 **Cross Search**: Search menu items across all stores
+- 📊 **Nutrient Sorting**: Sort by protein, calories, or PFC balance
 - 🔄 **Auto-sync**: Daily updates from official sources
 - 📱 **Offline Support**: Access data even without internet connection
-- 🔔 **Push Notifications**: Get notified when your favorite chains update their menu
 - ♿ **Accessible**: WCAG AA compliant for inclusive design
 
 ## Tech Stack
