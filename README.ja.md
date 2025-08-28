@@ -61,10 +61,22 @@ git clone https://github.com/yourusername/protein-finder.git
 cd protein-finder
 
 # 依存関係をインストール
-npm install
+npm install --legacy-peer-deps
 
 # 開発サーバーを起動
 npm start
+```
+
+### 初回起動時のセットアップ
+
+アプリは初回起動時に自動的に以下を実行します：
+1. SQLiteデータベースの初期化
+2. テストデータの投入（すき家、吉野家、松屋の実際のメニューに近いデータ）
+
+手動でテストデータをリセットしたい場合：
+```bash
+# テストデータの再投入
+npm run seed
 ```
 
 ### アプリの実行

@@ -4,24 +4,37 @@
  */
 
 import { Stack } from 'expo-router';
-import { useEffect } from 'react';
-import { DatabaseService } from '@/infrastructure/database/DatabaseService';
+import { useEffect, useState } from 'react';
+import { View, Text, ActivityIndicator, StyleSheet } from 'react-native';
+import { performInitialSetup } from '@/utils/initialSetup';
 
 export default function RootLayout() {
+  const [isInitialized, setIsInitialized] = useState(false);
+
   useEffect(() => {
-    // データベース初期化
-    const initDatabase = async () => {
+    // 初回セットアップを実行
+    const setup = async () => {
       try {
-        const db = new DatabaseService();
-        await db.initialize();
-        console.log('Database initialized');
+        await performInitialSetup();
       } catch (error) {
-        console.error('Failed to initialize database:', error);
+        console.error('Setup error:', error);
+      } finally {
+        setIsInitialized(true);
       }
     };
 
-    initDatabase();
+    setup();
   }, []);
+
+  // セットアップ中は読み込み画面を表示
+  if (!isInitialized) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+        <Text style={styles.loadingText}>準備中...</Text>
+      </View>
+    );
+  }
 
   return (
     <Stack>
@@ -46,3 +59,17 @@ export default function RootLayout() {
     </Stack>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f7',
+  },
+  loadingText: {
+    marginTop: 12,
+    fontSize: 16,
+    color: '#8E8E93',
+  },
+});

@@ -252,8 +252,53 @@ const measure = (name: string, fn: () => void) => {
 - [ ] パフォーマンステストを実施したか
 - [ ] メモリリークのチェックを行ったか
 
+## 11. Expo SDK 53 固有の最適化
+
+### New Architecture の活用
+SDK 53ではNew Architectureがデフォルトで有効化：
+```json
+// app.json
+{
+  "expo": {
+    "newArchEnabled": true // SDK 53ではデフォルト
+  }
+}
+```
+
+### Expo Atlas でバンドルサイズ分析
+```bash
+# バンドルサイズの可視化
+EXPO_ATLAS=1 npx expo start
+```
+
+### expo-audio の使用（expo-avより高速）
+```typescript
+// ❌ Old: expo-av
+import { Audio } from 'expo-av';
+
+// ✅ New: expo-audio（より高速）
+import { useAudioPlayer } from 'expo-audio';
+```
+
+### Edge-to-Edge Display（Android）
+```json
+// app.json
+{
+  "expo": {
+    "android": {
+      "edgeToEdgeEnabled": true
+    }
+  }
+}
+```
+
+### ビルド時間の最適化
+Expo SDK 53では、プリビルドモジュールによりAndroidビルド時間が短縮
+
 ## 参考資料
 - [React Native Performance](https://reactnative.dev/docs/performance)
 - [React.memo](https://react.dev/reference/react/memo)
 - [Understanding useMemo and useCallback](https://www.joshwcomeau.com/react/usememo-and-usecallback/)
 - [@shopify/flash-list](https://shopify.github.io/flash-list/)
+- [Expo SDK 53 Changelog](https://expo.dev/changelog/sdk-53)
+- [Best Practices for reducing lag in Expo apps](https://expo.dev/blog/best-practices-for-reducing-lag-in-expo-apps)
