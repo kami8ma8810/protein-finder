@@ -20,7 +20,8 @@
       "Bash(npx expo install:*)",
       "WebFetch(domain:reactnative.dev)",
       "WebSearch",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(cat:*)"
     ],
     "deny": [],
     "ask": []
