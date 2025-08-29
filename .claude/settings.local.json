@@ -21,7 +21,16 @@
       "WebFetch(domain:reactnative.dev)",
       "WebSearch",
       "Bash(npm start)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "mcp__obsidian-mcp-tools__get_vault_file",
+      "mcp__obsidian-mcp-tools__create_vault_file",
+      "mcp__obsidian-mcp-tools__show_file_in_obsidian",
+      "mcp__serena-mcp-server__list_dir",
+      "mcp__serena-mcp-server__find_file",
+      "mcp__serena-mcp-server__find_symbol",
+      "mcp__serena-mcp-server__insert_before_symbol",
+      "mcp__serena-mcp-server__search_for_pattern",
+      "Bash(git diff:*)"
     ],
     "deny": [],
     "ask": []
