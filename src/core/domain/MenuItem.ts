@@ -69,6 +69,17 @@ export class MenuItem {
   /**
    * 特定の栄養素をグラム単位で取得
    */
+  /**
+   * カロリーをkcal単位で取得
+   */
+  get caloriesInKcal(): number {
+    const calories = this.getNutrient('calories');
+    if (!calories) return 0;
+    
+    // caloriesは通常kcal単位で保存されている
+    return calories.value;
+  }
+
   getNutrientInGrams(type: NutrientType): number {
     const nutrient = this.getNutrient(type);
     if (!nutrient) return 0;

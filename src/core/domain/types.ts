@@ -8,7 +8,8 @@ export type NutrientType =
   | 'carbs' 
   | 'fiber' 
   | 'sodium' 
-  | 'energy';
+  | 'energy'
+  | 'calories';
 
 export type NutrientUnit = 'g' | 'mg' | 'kcal';
 

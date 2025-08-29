@@ -11,14 +11,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   RefreshControl,
-  SegmentedControlIOS,
-  Platform,
 } from 'react-native';
 import { useLocalSearchParams, useRouter, Stack } from 'expo-router';
 import { MenuItem } from '@/core/domain/MenuItem';
 import { MenuRepository } from '@/infrastructure/database/MenuRepository';
 import { DatabaseService } from '@/infrastructure/database/DatabaseService';
 import { MenuApiService } from '@/infrastructure/api/MenuApiService';
+import { FilterChipGroup } from '@/presentation/components/common';
 
 type SortOption = 'protein' | 'pfc' | 'calories';
 
@@ -149,18 +148,18 @@ export default function ChainMenuScreen() {
         }} 
       />
       <View style={styles.container}>
-        {Platform.OS === 'ios' && (
-          <View style={styles.sortContainer}>
-            <SegmentedControlIOS
-              values={['タンパク質順', 'PFC順', 'カロリー順']}
-              selectedIndex={['protein', 'pfc', 'calories'].indexOf(sortOption)}
-              onChange={(event) => {
-                const options: SortOption[] = ['protein', 'pfc', 'calories'];
-                setSortOption(options[event.nativeEvent.selectedSegmentIndex]);
-              }}
-            />
-          </View>
-        )}
+        <View style={styles.sortContainer}>
+          <FilterChipGroup
+            chips={[
+              { id: 'protein', label: 'タンパク質順' },
+              { id: 'pfc', label: 'PFC順' },
+              { id: 'calories', label: 'カロリー順' },
+            ]}
+            selectedIds={[sortOption]}
+            onChipPress={(id) => setSortOption(id as SortOption)}
+            multiSelect={false}
+          />
+        </View>
 
         {loading ? (
           <View style={styles.centerContainer}>
