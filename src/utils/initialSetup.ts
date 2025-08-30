@@ -13,7 +13,7 @@ export async function performInitialSetup(): Promise<void> {
   try {
     // セットアップ済みかチェック
     const setupComplete = await AsyncStorage.getItem(SETUP_COMPLETE_KEY);
-    
+
     if (setupComplete === 'true') {
       console.log('✅ セットアップは既に完了しています');
       return;
@@ -32,7 +32,7 @@ export async function performInitialSetup(): Promise<void> {
 
     // セットアップ完了フラグを保存
     await AsyncStorage.setItem(SETUP_COMPLETE_KEY, 'true');
-    
+
     console.log('🎉 初回セットアップが完了しました！');
   } catch (error) {
     console.error('❌ セットアップに失敗しました:', error);

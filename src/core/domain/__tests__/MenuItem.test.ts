@@ -64,9 +64,7 @@ describe('MenuItem', () => {
         chain: 'test',
         name: 'テスト商品',
         per: 'serving' as PerUnit,
-        nutrients: [
-          { type: 'protein', value: 5000, unit: 'mg' },
-        ],
+        nutrients: [{ type: 'protein', value: 5000, unit: 'mg' }],
         lastSeenAt: '2024-12-28T10:00:00Z',
         sourceUrl: 'https://example.com',
         sourceHash: 'test',
@@ -125,9 +123,7 @@ describe('MenuItem', () => {
         chain: 'test',
         name: 'テスト商品',
         per: '100g' as PerUnit,
-        nutrients: [
-          { type: 'protein', value: 10, unit: 'g' },
-        ],
+        nutrients: [{ type: 'protein', value: 10, unit: 'g' }],
         lastSeenAt: '2024-12-28T10:00:00Z',
         sourceUrl: 'https://example.com',
         sourceHash: 'test',
@@ -215,9 +211,7 @@ describe('MenuItem', () => {
           chain: 'test',
           name: 'テスト',
           per: 'serving' as PerUnit,
-          nutrients: [
-            { type: 'protein', value: -10, unit: 'g' },
-          ],
+          nutrients: [{ type: 'protein', value: -10, unit: 'g' }],
           lastSeenAt: '2024-12-28T10:00:00Z',
           sourceUrl: 'https://example.com',
           sourceHash: 'test',

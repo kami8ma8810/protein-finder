@@ -3,7 +3,12 @@
  * メニューAPI通信の実装
  */
 
-import { IMenuApiService, MenuApiResponse, ChainInfo, CacheOptions } from '@core/services/IMenuApiService';
+import {
+  IMenuApiService,
+  MenuApiResponse,
+  ChainInfo,
+  CacheOptions,
+} from '@core/services/IMenuApiService';
 import { MenuItem } from '@core/domain/MenuItem';
 import { MenuItemData } from '@core/domain/types';
 import { ETagCacheManager } from '../cache/ETagCacheManager';
@@ -19,7 +24,7 @@ export class MenuApiService implements IMenuApiService {
 
   async fetchMenusByChain(chain: string, options?: CacheOptions): Promise<MenuApiResponse | null> {
     const url = `${this.baseUrl}/menus/${chain}`;
-    
+
     // キャッシュ強制更新でない場合はキャッシュをチェック
     if (!options?.forceRefresh) {
       const cached = await this.cacheManager.getCache(url);
@@ -35,11 +40,11 @@ export class MenuApiService implements IMenuApiService {
     try {
       // 保存されているETagを取得
       const savedEtag = await this.cacheManager.getETag(url);
-      
+
       const headers: HeadersInit = {
-        'Accept': 'application/json',
+        Accept: 'application/json',
       };
-      
+
       if (savedEtag && !options?.forceRefresh) {
         headers['If-None-Match'] = savedEtag;
       }
@@ -79,7 +84,7 @@ export class MenuApiService implements IMenuApiService {
       };
     } catch (error) {
       console.error('API request failed:', error);
-      
+
       // エラー時はキャッシュを返す
       const cached = await this.cacheManager.getCache(url);
       if (cached) {
@@ -89,14 +94,14 @@ export class MenuApiService implements IMenuApiService {
           lastModified: cached.data.lastModified,
         };
       }
-      
+
       return null;
     }
   }
 
   async fetchAllMenus(options?: CacheOptions): Promise<MenuApiResponse | null> {
     const url = `${this.baseUrl}/menus`;
-    
+
     if (!options?.forceRefresh) {
       const cached = await this.cacheManager.getCache(url);
       if (cached) {
@@ -110,11 +115,11 @@ export class MenuApiService implements IMenuApiService {
 
     try {
       const savedEtag = await this.cacheManager.getETag(url);
-      
+
       const headers: HeadersInit = {
-        'Accept': 'application/json',
+        Accept: 'application/json',
       };
-      
+
       if (savedEtag && !options?.forceRefresh) {
         headers['If-None-Match'] = savedEtag;
       }
@@ -152,7 +157,7 @@ export class MenuApiService implements IMenuApiService {
       };
     } catch (error) {
       console.error('API request failed:', error);
-      
+
       const cached = await this.cacheManager.getCache(url);
       if (cached) {
         return {
@@ -161,18 +166,18 @@ export class MenuApiService implements IMenuApiService {
           lastModified: cached.data.lastModified,
         };
       }
-      
+
       return null;
     }
   }
 
   async fetchAvailableChains(): Promise<ChainInfo[]> {
     const url = `${this.baseUrl}/chains`;
-    
+
     try {
       const response = await fetch(url, {
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       });
 
@@ -184,7 +189,7 @@ export class MenuApiService implements IMenuApiService {
       return data.chains || [];
     } catch (error) {
       console.error('Failed to fetch chains:', error);
-      
+
       // フォールバック: ハードコーディングされた初期チェーンリスト
       return [
         {
@@ -205,6 +210,12 @@ export class MenuApiService implements IMenuApiService {
           displayName: '松屋',
           websiteUrl: 'https://www.matsuyafoods.co.jp/',
         },
+        {
+          id: 'nakau',
+          name: 'nakau',
+          displayName: 'なか卯',
+          websiteUrl: 'https://www.nakau.co.jp/',
+        },
       ];
     }
   }
@@ -217,7 +228,7 @@ export class MenuApiService implements IMenuApiService {
    * APIレスポンスをMenuItemインスタンスに変換
    */
   private parseMenuItems(items: any[]): MenuItem[] {
-    return items.map(item => {
+    return items.map((item) => {
       const data: MenuItemData = {
         id: item.id,
         chain: item.chain,

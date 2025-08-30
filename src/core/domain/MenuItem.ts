@@ -53,7 +53,7 @@ export class MenuItem {
    * 特定の栄養素を取得
    */
   getNutrient(type: NutrientType): NutrientValue | undefined {
-    return this.nutrients.find(n => n.type === type);
+    return this.nutrients.find((n) => n.type === type);
   }
 
   /**
@@ -75,7 +75,7 @@ export class MenuItem {
   get caloriesInKcal(): number {
     const calories = this.getNutrient('calories');
     if (!calories) return 0;
-    
+
     // caloriesは通常kcal単位で保存されている
     return calories.value;
   }
@@ -118,7 +118,7 @@ export class MenuItem {
     }
 
     const multiplier = servingGrams / 100;
-    const convertedNutrients = this.nutrients.map(nutrient => ({
+    const convertedNutrients = this.nutrients.map((nutrient) => ({
       ...nutrient,
       value: nutrient.value * multiplier,
     }));
@@ -139,7 +139,7 @@ export class MenuItem {
 
     // 全角数字を半角に変換
     const normalized = this.servingSize
-      .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xFEE0))
+      .replace(/[０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xfee0))
       .replace(/ｇ/g, 'g')
       .replace(/グラム/g, 'g');
 

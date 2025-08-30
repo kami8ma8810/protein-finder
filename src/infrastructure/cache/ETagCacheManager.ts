@@ -53,17 +53,17 @@ export class ETagCacheManager {
   async getCache(url: string): Promise<CacheEntry | null> {
     const key = `${ETagCacheManager.CACHE_PREFIX}${url}`;
     const cached = await AsyncStorage.getItem(key);
-    
+
     if (!cached) return null;
-    
+
     const entry: CacheEntry = JSON.parse(cached);
-    
+
     // キャッシュ期限チェック
     if (Date.now() - entry.timestamp > ETagCacheManager.CACHE_EXPIRY_MS) {
       await this.removeCache(url);
       return null;
     }
-    
+
     return entry;
   }
 
@@ -73,11 +73,8 @@ export class ETagCacheManager {
   async removeCache(url: string): Promise<void> {
     const cacheKey = `${ETagCacheManager.CACHE_PREFIX}${url}`;
     const etagKey = `${ETagCacheManager.ETAG_PREFIX}${url}`;
-    
-    await Promise.all([
-      AsyncStorage.removeItem(cacheKey),
-      AsyncStorage.removeItem(etagKey),
-    ]);
+
+    await Promise.all([AsyncStorage.removeItem(cacheKey), AsyncStorage.removeItem(etagKey)]);
   }
 
   /**
@@ -86,10 +83,11 @@ export class ETagCacheManager {
   async clearAllCache(): Promise<void> {
     const keys = await AsyncStorage.getAllKeys();
     const cacheKeys = keys.filter(
-      key => key.startsWith(ETagCacheManager.CACHE_PREFIX) || 
-             key.startsWith(ETagCacheManager.ETAG_PREFIX)
+      (key) =>
+        key.startsWith(ETagCacheManager.CACHE_PREFIX) ||
+        key.startsWith(ETagCacheManager.ETAG_PREFIX),
     );
-    
+
     if (cacheKeys.length > 0) {
       await AsyncStorage.multiRemove(cacheKeys);
     }
@@ -100,8 +98,8 @@ export class ETagCacheManager {
    */
   async getCacheSize(): Promise<number> {
     const keys = await AsyncStorage.getAllKeys();
-    const cacheKeys = keys.filter(key => key.startsWith(ETagCacheManager.CACHE_PREFIX));
-    
+    const cacheKeys = keys.filter((key) => key.startsWith(ETagCacheManager.CACHE_PREFIX));
+
     let totalSize = 0;
     for (const key of cacheKeys) {
       const value = await AsyncStorage.getItem(key);
@@ -109,7 +107,7 @@ export class ETagCacheManager {
         totalSize += value.length;
       }
     }
-    
+
     return totalSize;
   }
 }

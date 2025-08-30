@@ -2,14 +2,7 @@
  * Core Domain Types
  */
 
-export type NutrientType = 
-  | 'protein' 
-  | 'fat' 
-  | 'carbs' 
-  | 'fiber' 
-  | 'sodium' 
-  | 'energy'
-  | 'calories';
+export type NutrientType = 'protein' | 'fat' | 'carbs' | 'fiber' | 'sodium' | 'energy' | 'calories';
 
 export type NutrientUnit = 'g' | 'mg' | 'kcal';
 

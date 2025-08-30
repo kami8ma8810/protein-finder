@@ -24,16 +24,16 @@ export interface IMenuRepository {
   save(item: MenuItem): Promise<void>;
   bulkSave(items: MenuItem[]): Promise<void>;
   delete(id: string): Promise<void>;
-  
+
   // 店舗別検索
   findByChain(chain: string): Promise<MenuItem[]>;
-  
+
   // メニュー名検索
   searchByName(query: string): Promise<MenuItem[]>;
-  
+
   // 栄養素フィルタ
   findByNutrientFilter(filter: NutrientFilter): Promise<MenuItem[]>;
-  
+
   // その他
   getAvailableChains(): Promise<string[]>;
   getLastUpdatedAt(): Promise<Date | null>;
