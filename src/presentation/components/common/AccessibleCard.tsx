@@ -49,22 +49,15 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
   badgeColor = Colors.system.red,
 }) => {
   const cardContent = (
-    <View style={[
-      styles.container,
-      selected && styles.selected,
-      disabled && styles.disabled,
-      style,
-    ]}>
+    <View
+      style={[styles.container, selected && styles.selected, disabled && styles.disabled, style]}
+    >
       <View style={styles.content}>
         {(title || subtitle) && (
           <View style={styles.textContainer}>
             {title && (
               <Text
-                style={[
-                  styles.title,
-                  disabled && styles.disabledText,
-                  titleStyle,
-                ]}
+                style={[styles.title, disabled && styles.disabledText, titleStyle]}
                 numberOfLines={2}
               >
                 {title}
@@ -72,11 +65,7 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
             )}
             {subtitle && (
               <Text
-                style={[
-                  styles.subtitle,
-                  disabled && styles.disabledText,
-                  subtitleStyle,
-                ]}
+                style={[styles.subtitle, disabled && styles.disabledText, subtitleStyle]}
                 numberOfLines={3}
               >
                 {subtitle}
@@ -86,7 +75,7 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
         )}
         {children}
       </View>
-      
+
       <View style={styles.accessories}>
         {badge !== undefined && (
           <View style={[styles.badge, { backgroundColor: badgeColor }]}>
@@ -95,9 +84,7 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
             </Text>
           </View>
         )}
-        {showChevron && (
-          <Text style={styles.chevron}>›</Text>
-        )}
+        {showChevron && <Text style={styles.chevron}>›</Text>}
       </View>
     </View>
   );
@@ -123,10 +110,7 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
   }
 
   return (
-    <View
-      accessibilityRole="none"
-      testID={testID}
-    >
+    <View accessibilityRole="none" testID={testID}>
       {cardContent}
     </View>
   );

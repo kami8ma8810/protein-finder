@@ -34,7 +34,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
+
     this.setState({
       errorInfo,
     });
@@ -63,10 +63,8 @@ export class ErrorBoundary extends Component<Props, State> {
           <View style={styles.content}>
             <Text style={styles.emoji}>😅</Text>
             <Text style={styles.title}>おっと、エラーが発生しました</Text>
-            <Text style={styles.message}>
-              申し訳ございません。予期しないエラーが発生しました。
-            </Text>
-            
+            <Text style={styles.message}>申し訳ございません。予期しないエラーが発生しました。</Text>
+
             <TouchableOpacity
               style={styles.button}
               onPress={this.handleReset}
@@ -79,13 +77,9 @@ export class ErrorBoundary extends Component<Props, State> {
             {__DEV__ && this.state.error && (
               <View style={styles.errorDetails}>
                 <Text style={styles.errorTitle}>エラー詳細（開発用）</Text>
-                <Text style={styles.errorText}>
-                  {this.state.error.toString()}
-                </Text>
+                <Text style={styles.errorText}>{this.state.error.toString()}</Text>
                 {this.state.errorInfo && (
-                  <Text style={styles.stackTrace}>
-                    {this.state.errorInfo.componentStack}
-                  </Text>
+                  <Text style={styles.stackTrace}>{this.state.errorInfo.componentStack}</Text>
                 )}
               </View>
             )}

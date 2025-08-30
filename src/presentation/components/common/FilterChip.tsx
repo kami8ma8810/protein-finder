@@ -75,11 +75,7 @@ export const FilterChip: React.FC<FilterChipProps> = ({
   const displayLabel = `${icon ? `${icon} ` : ''}${label}${countLabel}`;
 
   return (
-    <Animated.View
-      style={[
-        { transform: [{ scale: scaleValue }] },
-      ]}
-    >
+    <Animated.View style={[{ transform: [{ scale: scaleValue }] }]}>
       <TouchableOpacity
         style={chipStyle}
         onPress={onPress}
@@ -88,7 +84,9 @@ export const FilterChip: React.FC<FilterChipProps> = ({
         disabled={disabled}
         accessibilityRole={accessibilityRole}
         accessibilityLabel={accessibilityLabel || `${label}${countLabel}`}
-        accessibilityHint={accessibilityHint || `タップして${label}フィルターを${selected ? '解除' : '適用'}`}
+        accessibilityHint={
+          accessibilityHint || `タップして${label}フィルターを${selected ? '解除' : '適用'}`
+        }
         accessibilityState={{
           selected,
           disabled,
@@ -96,9 +94,7 @@ export const FilterChip: React.FC<FilterChipProps> = ({
         testID={testID}
         activeOpacity={0.8}
       >
-        <Text style={labelStyle}>
-          {displayLabel}
-        </Text>
+        <Text style={labelStyle}>{displayLabel}</Text>
       </TouchableOpacity>
     </Animated.View>
   );
@@ -126,13 +122,16 @@ export const FilterChipGroup: React.FC<FilterChipGroupProps> = ({
   color = Colors.primary.blue,
   style,
 }) => {
-  const handleChipPress = useCallback((id: string) => {
-    if (!multiSelect) {
-      onChipPress(id);
-    } else {
-      onChipPress(id);
-    }
-  }, [multiSelect, onChipPress]);
+  const handleChipPress = useCallback(
+    (id: string) => {
+      if (!multiSelect) {
+        onChipPress(id);
+      } else {
+        onChipPress(id);
+      }
+    },
+    [multiSelect, onChipPress],
+  );
 
   return (
     <Animated.ScrollView

@@ -5,7 +5,7 @@ export const Colors = {
     lightBlue: '#34C8FF',
     darkBlue: '#0051D5',
   },
-  
+
   // System Colors (iOS inspired)
   system: {
     red: '#FF3B30',
@@ -18,7 +18,7 @@ export const Colors = {
     purple: '#AF52DE',
     pink: '#FF2D55',
   },
-  
+
   // Gray Scale (iOS system grays)
   gray: {
     gray1: '#8E8E93',
@@ -28,7 +28,7 @@ export const Colors = {
     gray5: '#E5E5EA',
     gray6: '#F2F2F7',
   },
-  
+
   // Semantic Colors
   background: {
     primary: '#FFFFFF',
@@ -36,37 +36,37 @@ export const Colors = {
     tertiary: '#FFFFFF',
     grouped: '#F2F2F7',
     groupedSecondary: '#FFFFFF',
-    
+
     // Dark mode support (future)
     primaryDark: '#000000',
     secondaryDark: '#1C1C1E',
     tertiaryDark: '#2C2C2E',
   },
-  
+
   // Label Colors (text)
   label: {
     primary: '#000000',
     secondary: 'rgba(60, 60, 67, 0.6)',
     tertiary: 'rgba(60, 60, 67, 0.3)',
     quaternary: 'rgba(60, 60, 67, 0.18)',
-    
+
     // Dark mode support (future)
     primaryDark: '#FFFFFF',
     secondaryDark: 'rgba(235, 235, 245, 0.6)',
     tertiaryDark: 'rgba(235, 235, 245, 0.3)',
     quaternaryDark: 'rgba(235, 235, 245, 0.18)',
   },
-  
+
   // Separator Colors
   separator: {
     default: 'rgba(60, 60, 67, 0.36)',
     opaque: '#C6C6C8',
-    
+
     // Dark mode support (future)
     defaultDark: 'rgba(84, 84, 88, 0.65)',
     opaqueDark: '#38383A',
   },
-  
+
   // Nutrition Colors (custom for our app)
   nutrition: {
     protein: '#FF6B6B',
@@ -84,7 +84,7 @@ export const Typography = {
     semibold: 'System',
     bold: 'System',
   },
-  
+
   // Font Sizes (iOS Human Interface Guidelines)
   fontSize: {
     largeTitle: 34,
@@ -99,7 +99,7 @@ export const Typography = {
     caption1: 12,
     caption2: 11,
   },
-  
+
   // Line Heights
   lineHeight: {
     largeTitle: 41,
@@ -114,7 +114,7 @@ export const Typography = {
     caption1: 16,
     caption2: 13,
   },
-  
+
   // Font Weights
   fontWeight: {
     regular: '400' as const,
@@ -123,7 +123,7 @@ export const Typography = {
     bold: '700' as const,
     heavy: '800' as const,
   },
-  
+
   // Letter Spacing
   letterSpacing: {
     tight: -0.5,
@@ -142,7 +142,7 @@ export const Spacing = {
   xl: 32,
   xxl: 48,
   xxxl: 64,
-  
+
   // Component specific
   padding: {
     card: 16,
@@ -150,7 +150,7 @@ export const Spacing = {
     input: 16,
     screen: 16,
   },
-  
+
   margin: {
     section: 32,
     item: 16,
@@ -164,7 +164,7 @@ export const BorderRadius = {
   large: 12,
   xl: 16,
   full: 9999,
-  
+
   // Component specific
   card: 12,
   button: 8,
@@ -223,13 +223,13 @@ export const Animation = {
     normal: 300,
     slow: 500,
   },
-  
+
   easing: {
     linear: 'linear',
     easeIn: 'ease-in',
     easeOut: 'ease-out',
     easeInOut: 'ease-in-out',
-    
+
     // iOS spring animations
     spring: {
       damping: 0.8,
@@ -240,13 +240,13 @@ export const Animation = {
 
 export const Accessibility = {
   minTouchTarget: 44, // iOS minimum touch target size
-  
+
   focusStyle: {
     borderWidth: 2,
     borderColor: Colors.primary.blue,
     borderRadius: BorderRadius.medium,
   },
-  
+
   contrast: {
     minimum: 4.5, // WCAG AA
     enhanced: 7, // WCAG AAA
@@ -255,12 +255,12 @@ export const Accessibility = {
 
 export const Layout = {
   maxContentWidth: 428, // iPhone 14 Pro Max width
-  
+
   grid: {
     columns: 12,
     gutter: Spacing.md,
   },
-  
+
   safeArea: {
     top: 44, // iOS status bar
     bottom: 34, // iPhone home indicator
@@ -268,10 +268,12 @@ export const Layout = {
 } as const;
 
 // Type exports for TypeScript
-export type ColorValue = typeof Colors[keyof typeof Colors][keyof typeof Colors[keyof typeof Colors]];
-export type TypographyValue = typeof Typography[keyof typeof Typography][keyof typeof Typography[keyof typeof Typography]];
-export type SpacingValue = typeof Spacing[keyof typeof Spacing];
-export type BorderRadiusValue = typeof BorderRadius[keyof typeof BorderRadius];
+export type ColorValue =
+  (typeof Colors)[keyof typeof Colors][keyof (typeof Colors)[keyof typeof Colors]];
+export type TypographyValue =
+  (typeof Typography)[keyof typeof Typography][keyof (typeof Typography)[keyof typeof Typography]];
+export type SpacingValue = (typeof Spacing)[keyof typeof Spacing];
+export type BorderRadiusValue = (typeof BorderRadius)[keyof typeof BorderRadius];
 
 // Theme type for future theming support
 export interface Theme {

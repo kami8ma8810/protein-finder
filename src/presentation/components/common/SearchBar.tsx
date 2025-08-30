@@ -45,7 +45,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const handleFocus = useCallback(() => {
     setIsFocused(true);
     onFocus?.();
-    
+
     if (showCancelButton) {
       Animated.timing(cancelButtonWidth, {
         toValue: 70,
@@ -58,7 +58,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const handleBlur = useCallback(() => {
     setIsFocused(false);
     onBlur?.();
-    
+
     if (showCancelButton && !value) {
       Animated.timing(cancelButtonWidth, {
         toValue: 0,
@@ -83,12 +83,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <View style={styles.container}>
-      <View style={[
-        styles.searchContainer,
-        isFocused && styles.searchContainerFocused,
-      ]}>
+      <View style={[styles.searchContainer, isFocused && styles.searchContainerFocused]}>
         <Text style={styles.searchIcon}>🔍</Text>
-        
+
         <TextInput
           ref={inputRef}
           style={styles.input}
@@ -110,7 +107,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           accessibilityRole="search"
           testID={testID}
         />
-        
+
         {value.length > 0 && (
           <TouchableOpacity
             onPress={handleClear}
@@ -125,12 +122,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </TouchableOpacity>
         )}
       </View>
-      
+
       {showCancelButton && (
-        <Animated.View style={[
-          styles.cancelContainer,
-          { width: cancelButtonWidth },
-        ]}>
+        <Animated.View style={[styles.cancelContainer, { width: cancelButtonWidth }]}>
           <TouchableOpacity
             onPress={handleCancel}
             style={styles.cancelButton}

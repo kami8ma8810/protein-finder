@@ -32,10 +32,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
         accessibilityLabel={message || 'Loading'}
       />
       {message && (
-        <Text
-          style={styles.message}
-          accessibilityRole="text"
-        >
+        <Text style={styles.message} accessibilityRole="text">
           {message}
         </Text>
       )}
@@ -43,11 +40,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   );
 
   if (overlay) {
-    return (
-      <View style={[styles.overlay, fullScreen && styles.fullScreen]}>
-        {content}
-      </View>
-    );
+    return <View style={[styles.overlay, fullScreen && styles.fullScreen]}>{content}</View>;
   }
 
   return content;
