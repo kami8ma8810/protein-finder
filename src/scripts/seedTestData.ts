@@ -3,10 +3,10 @@
  * 実際の牛丼チェーン店のメニューに近いテストデータを生成
  */
 
-import { DatabaseService } from '@/infrastructure/database/DatabaseService';
-import { MenuRepository } from '@/infrastructure/database/MenuRepository';
-import { MenuItem } from '@/core/domain/MenuItem';
-import { MenuItemData } from '@/core/domain/types';
+import { DatabaseService } from '../infrastructure/database/DatabaseService';
+import { MenuRepository } from '../infrastructure/database/MenuRepository';
+import { MenuItem } from '../core/domain/MenuItem';
+import { MenuItemData } from '../core/domain/types';
 
 // すき家のメニューデータ
 const sukiyaMenus: MenuItemData[] = [
@@ -375,12 +375,68 @@ const matsuyaMenus: MenuItemData[] = [
     sourceUrl: 'https://example.com/matsuya',
     sourceHash: 'matsuya_tofu_salad_' + Date.now(),
   },
+  {
+    id: 'matsuya_chicken_katsu',
+    chain: 'matsuya',
+    name: 'チキンかつ定食',
+    category: 'かつ',
+    per: 'serving',
+    nutrients: [
+      { type: 'protein', value: 42.1, unit: 'g' },
+      { type: 'fat', value: 38.2, unit: 'g' },
+      { type: 'carbs', value: 108.5, unit: 'g' },
+      { type: 'energy', value: 943, unit: 'kcal' },
+    ],
+    servingSize: '1人前（450g）',
+    lastSeenAt: new Date().toISOString(),
+    sourceUrl: 'https://example.com/matsuya',
+    sourceHash: 'matsuya_chicken_katsu_' + Date.now(),
+  },
+];
+
+// 追加チェーン店のサンプルデータ
+const additionalMenus: MenuItemData[] = [
+  // なか卯（うどんチェーン）
+  {
+    id: 'nakau_oyakodon',
+    chain: 'nakau',
+    name: '親子丼（並盛）',
+    category: '丼もの',
+    per: 'serving',
+    nutrients: [
+      { type: 'protein', value: 26.8, unit: 'g' },
+      { type: 'fat', value: 18.5, unit: 'g' },
+      { type: 'carbs', value: 92.3, unit: 'g' },
+      { type: 'energy', value: 658, unit: 'kcal' },
+    ],
+    servingSize: '並盛（350g）',
+    lastSeenAt: new Date().toISOString(),
+    sourceUrl: 'https://example.com/nakau',
+    sourceHash: 'nakau_oyakodon_' + Date.now(),
+  },
+  {
+    id: 'nakau_chicken_curry',
+    chain: 'nakau',
+    name: 'チキンカレー',
+    category: 'カレー',
+    per: 'serving',
+    nutrients: [
+      { type: 'protein', value: 31.2, unit: 'g' },
+      { type: 'fat', value: 28.8, unit: 'g' },
+      { type: 'carbs', value: 98.5, unit: 'g' },
+      { type: 'energy', value: 765, unit: 'kcal' },
+    ],
+    servingSize: '1人前（400g）',
+    lastSeenAt: new Date().toISOString(),
+    sourceUrl: 'https://example.com/nakau',
+    sourceHash: 'nakau_chicken_curry_' + Date.now(),
+  },
 ];
 
 // データ投入の実行関数
 export async function seedTestData(): Promise<void> {
   console.log('🌱 テストデータの投入を開始します...');
-  
+
   try {
     // データベースを初期化
     const db = new DatabaseService();
@@ -389,9 +445,10 @@ export async function seedTestData(): Promise<void> {
 
     // 各チェーンのデータを投入
     const allMenus = [
-      ...sukiyaMenus.map(data => new MenuItem(data)),
-      ...yoshinoyaMenus.map(data => new MenuItem(data)),
-      ...matsuyaMenus.map(data => new MenuItem(data)),
+      ...sukiyaMenus.map((data) => new MenuItem(data)),
+      ...yoshinoyaMenus.map((data) => new MenuItem(data)),
+      ...matsuyaMenus.map((data) => new MenuItem(data)),
+      ...additionalMenus.map((data) => new MenuItem(data)),
     ];
 
     console.log(`📝 ${allMenus.length}件のメニューアイテムを投入します`);
@@ -400,16 +457,18 @@ export async function seedTestData(): Promise<void> {
     await repository.bulkSave(allMenus);
 
     console.log('✅ テストデータの投入が完了しました！');
-    
+
     // 投入結果のサマリー
     const sukiyaCount = await repository.findByChain('sukiya');
     const yoshinoyaCount = await repository.findByChain('yoshinoya');
     const matsuyaCount = await repository.findByChain('matsuya');
-    
+    const nakauCount = await repository.findByChain('nakau');
+
     console.log('\n📊 投入結果:');
     console.log(`  すき家: ${sukiyaCount.length}件`);
     console.log(`  吉野家: ${yoshinoyaCount.length}件`);
     console.log(`  松屋: ${matsuyaCount.length}件`);
+    console.log(`  なか卯: ${nakauCount.length}件`);
     console.log(`  合計: ${allMenus.length}件`);
 
     await db.close();
@@ -421,9 +480,11 @@ export async function seedTestData(): Promise<void> {
 
 // 直接実行の場合
 if (require.main === module) {
-  seedTestData().then(() => {
-    process.exit(0);
-  }).catch(() => {
-    process.exit(1);
-  });
+  seedTestData()
+    .then(() => {
+      process.exit(0);
+    })
+    .catch(() => {
+      process.exit(1);
+    });
 }
