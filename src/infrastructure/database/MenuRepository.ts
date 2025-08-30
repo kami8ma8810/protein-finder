@@ -83,7 +83,7 @@ export class MenuRepository implements IMenuRepository {
       console.log(`🌐 Web版のため、${items.length}件のデータ保存をスキップ`);
       return;
     }
-    
+
     await this.db.transaction(async () => {
       for (const item of items) {
         await this.save(item);
@@ -103,7 +103,7 @@ export class MenuRepository implements IMenuRepository {
   async findByChain(chain: string): Promise<MenuItem[]> {
     if (Platform.OS === 'web') {
       // Web版ではモックデータを返す
-      return this.getMockMenuItems().filter(item => item.chain === chain);
+      return this.getMockMenuItems().filter((item) => item.chain === chain);
     }
 
     const rows = await this.db.query<MenuItemRow>(
@@ -117,8 +117,8 @@ export class MenuRepository implements IMenuRepository {
   async searchByName(query: string): Promise<MenuItem[]> {
     if (Platform.OS === 'web') {
       // Web版ではモックデータから検索
-      return this.getMockMenuItems().filter(item => 
-        item.name.toLowerCase().includes(query.toLowerCase())
+      return this.getMockMenuItems().filter((item) =>
+        item.name.toLowerCase().includes(query.toLowerCase()),
       );
     }
 
@@ -136,14 +136,14 @@ export class MenuRepository implements IMenuRepository {
     if (Platform.OS === 'web') {
       // Web版ではモックデータをフィルタリング
       let items = this.getMockMenuItems();
-      
+
       if (filter.minProtein !== undefined) {
-        items = items.filter(item => item.proteinInGrams >= filter.minProtein!);
+        items = items.filter((item) => item.proteinInGrams >= filter.minProtein!);
       }
       if (filter.maxProtein !== undefined) {
-        items = items.filter(item => item.proteinInGrams <= filter.maxProtein!);
+        items = items.filter((item) => item.proteinInGrams <= filter.maxProtein!);
       }
-      
+
       return items;
     }
     let sql = 'SELECT * FROM menu_items WHERE 1=1';
@@ -195,7 +195,7 @@ export class MenuRepository implements IMenuRepository {
   async getAvailableChains(): Promise<string[]> {
     if (Platform.OS === 'web') {
       // Web版ではモックデータから取得
-      const chains = new Set(this.getMockMenuItems().map(item => item.chain));
+      const chains = new Set(this.getMockMenuItems().map((item) => item.chain));
       return Array.from(chains).sort();
     }
     const rows = await this.db.query<{ chain: string }>(
@@ -300,11 +300,11 @@ export class MenuRepository implements IMenuRepository {
       },
     ];
 
-    return mockData.map(data => new MenuItem(data));
+    return mockData.map((data) => new MenuItem(data));
   }
 
   private getMockMenuItem(id: string): MenuItem | null {
     const items = this.getMockMenuItems();
-    return items.find(item => item.id === id) || null;
+    return items.find((item) => item.id === id) || null;
   }
 }

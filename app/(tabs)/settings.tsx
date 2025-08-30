@@ -14,6 +14,7 @@ import {
   Alert,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { router } from 'expo-router';
 import { Colors, Typography, Spacing } from '@/presentation/design-system/tokens';
 import { ErrorBoundary } from '@/presentation/components/common';
 
@@ -98,6 +99,19 @@ export default function SettingsScreen() {
             accessibilityHint="タップしてフィードバックページを開きます"
           >
             <Text style={styles.settingText}>フィードバック</Text>
+            <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>管理</Text>
+          <TouchableOpacity
+            style={styles.settingItem}
+            onPress={() => router.push('/admin')}
+            accessibilityLabel="管理画面"
+            accessibilityHint="タップして管理画面を開きます"
+          >
+            <Text style={styles.settingText}>管理画面</Text>
             <Ionicons name="chevron-forward" size={20} color="#C7C7CC" />
           </TouchableOpacity>
         </View>

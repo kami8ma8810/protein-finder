@@ -22,10 +22,10 @@ describe('MenuApiService', () => {
   beforeEach(() => {
     service = new MenuApiService('https://api.test.com');
     jest.clearAllMocks();
-    
+
     // fetchモックをリセット
     (fetch as jest.Mock).mockReset();
-    
+
     // AsyncStorageのモックをリセット
     const AsyncStorage = require('@react-native-async-storage/async-storage');
     AsyncStorage.getItem.mockReset().mockResolvedValue(null);

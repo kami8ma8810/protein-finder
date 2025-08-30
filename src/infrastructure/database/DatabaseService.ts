@@ -39,7 +39,7 @@ export class DatabaseService {
       throw new Error('Database not initialized');
     }
 
-    // menu_items テーブル
+    // menu_items テーブル（改良版）
     await this.database.execAsync(`
       CREATE TABLE IF NOT EXISTS menu_items (
         id TEXT PRIMARY KEY,
@@ -56,17 +56,21 @@ export class DatabaseService {
         last_seen_at TEXT NOT NULL,
         source_url TEXT NOT NULL,
         source_hash TEXT NOT NULL,
+        data_source_id TEXT,
+        last_manual_update TEXT,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP,
-        updated_at TEXT DEFAULT CURRENT_TIMESTAMP
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (data_source_id) REFERENCES data_sources(id)
       );
 
       CREATE INDEX IF NOT EXISTS idx_menu_chain ON menu_items(chain);
       CREATE INDEX IF NOT EXISTS idx_menu_protein ON menu_items(protein_g);
       CREATE INDEX IF NOT EXISTS idx_menu_per ON menu_items(per);
       CREATE INDEX IF NOT EXISTS idx_menu_name ON menu_items(name);
+      CREATE INDEX IF NOT EXISTS idx_menu_updated ON menu_items(updated_at);
     `);
 
-    // chains テーブル（将来の拡張用）
+    // chains テーブル（拡張版）
     await this.database.execAsync(`
       CREATE TABLE IF NOT EXISTS chains (
         id TEXT PRIMARY KEY,
@@ -74,8 +78,85 @@ export class DatabaseService {
         display_name TEXT NOT NULL,
         logo_url TEXT,
         website_url TEXT,
+        nutrition_page_url TEXT,
+        terms_url TEXT,
+        data_collection_method TEXT CHECK (data_collection_method IN ('manual', 'api', 'scraping')),
+        legal_notice TEXT,
         created_at TEXT DEFAULT CURRENT_TIMESTAMP
       );
+    `);
+
+    // data_sources テーブル（新規）
+    await this.database.execAsync(`
+      CREATE TABLE IF NOT EXISTS data_sources (
+        id TEXT PRIMARY KEY,
+        chain_id TEXT NOT NULL,
+        source_type TEXT CHECK (source_type IN ('official_website', 'api', 'manual_entry', 'user_submission')),
+        source_url TEXT,
+        last_fetched_at TEXT,
+        fetch_method TEXT CHECK (fetch_method IN ('manual', 'automated')),
+        data_accuracy_note TEXT,
+        legal_compliance_note TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (chain_id) REFERENCES chains(id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_data_source_chain ON data_sources(chain_id);
+      CREATE INDEX IF NOT EXISTS idx_data_source_type ON data_sources(source_type);
+    `);
+
+    // update_logs テーブル（新規）
+    await this.database.execAsync(`
+      CREATE TABLE IF NOT EXISTS update_logs (
+        id TEXT PRIMARY KEY,
+        menu_item_id TEXT,
+        chain_id TEXT,
+        update_type TEXT CHECK (update_type IN ('manual', 'automated', 'user_correction')),
+        updater_name TEXT,
+        update_note TEXT,
+        old_values TEXT,
+        new_values TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (menu_item_id) REFERENCES menu_items(id),
+        FOREIGN KEY (chain_id) REFERENCES chains(id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_update_log_menu ON update_logs(menu_item_id);
+      CREATE INDEX IF NOT EXISTS idx_update_log_date ON update_logs(created_at);
+    `);
+
+    // legal_notices テーブル（新規）
+    await this.database.execAsync(`
+      CREATE TABLE IF NOT EXISTS legal_notices (
+        id TEXT PRIMARY KEY,
+        type TEXT CHECK (type IN ('disclaimer', 'terms_of_use', 'privacy_policy', 'data_usage')),
+        title TEXT NOT NULL,
+        content TEXT NOT NULL,
+        version TEXT NOT NULL,
+        effective_date TEXT NOT NULL,
+        is_active INTEGER DEFAULT 1,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_legal_type ON legal_notices(type);
+      CREATE INDEX IF NOT EXISTS idx_legal_active ON legal_notices(is_active);
+    `);
+
+    // user_consent_logs テーブル（新規）
+    await this.database.execAsync(`
+      CREATE TABLE IF NOT EXISTS user_consent_logs (
+        id TEXT PRIMARY KEY,
+        legal_notice_id TEXT NOT NULL,
+        device_id TEXT NOT NULL,
+        consent_given INTEGER NOT NULL,
+        ip_hash TEXT,
+        created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (legal_notice_id) REFERENCES legal_notices(id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_consent_device ON user_consent_logs(device_id);
+      CREATE INDEX IF NOT EXISTS idx_consent_date ON user_consent_logs(created_at);
     `);
   }
 
