@@ -16,7 +16,9 @@
     "test:watch": "jest --config jest.config.simple.js --watch",
     "test:coverage": "jest --config jest.config.simple.js --coverage",
     "seed": "npx tsx src/scripts/seedTestData.ts",
-    "seed:real": "npx tsx src/scripts/seedRealData.ts"
+    "seed:real": "npx tsx src/scripts/seedRealData.ts",
+    "seed:additional": "npx tsx src/scripts/seedAdditionalChains.ts",
+    "seed:all": "npm run seed:real && npm run seed:additional"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
