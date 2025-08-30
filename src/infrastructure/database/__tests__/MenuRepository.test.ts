@@ -86,7 +86,7 @@ describe('MenuRepository', () => {
   describe('findByChain', () => {
     it('指定した店舗のメニューのみ取得できる', async () => {
       const sukiyaMenus = await repository.findByChain('sukiya');
-      
+
       expect(sukiyaMenus).toHaveLength(1);
       expect(sukiyaMenus[0]?.chain).toBe('sukiya');
       expect(sukiyaMenus[0]?.name).toBe('牛丼（並盛）');
@@ -94,27 +94,27 @@ describe('MenuRepository', () => {
 
     it('存在しない店舗の場合は空配列を返す', async () => {
       const result = await repository.findByChain('nonexistent');
-      
+
       expect(result).toEqual([]);
     });
 
     it('タンパク質量で降順ソートされている', async () => {
       // 複数のすき家メニューを追加
-      await repository.save(new MenuItem({
-        id: 'sukiya_cheese_gyudon',
-        chain: 'sukiya',
-        name: 'チーズ牛丼',
-        per: 'serving',
-        nutrients: [
-          { type: 'protein', value: 28.5, unit: 'g' },
-        ],
-        lastSeenAt: '2024-12-28T10:00:00Z',
-        sourceUrl: 'https://example.com',
-        sourceHash: 'xyz',
-      }));
+      await repository.save(
+        new MenuItem({
+          id: 'sukiya_cheese_gyudon',
+          chain: 'sukiya',
+          name: 'チーズ牛丼',
+          per: 'serving',
+          nutrients: [{ type: 'protein', value: 28.5, unit: 'g' }],
+          lastSeenAt: '2024-12-28T10:00:00Z',
+          sourceUrl: 'https://example.com',
+          sourceHash: 'xyz',
+        }),
+      );
 
       const sukiyaMenus = await repository.findByChain('sukiya');
-      
+
       expect(sukiyaMenus).toHaveLength(2);
       expect(sukiyaMenus[0]?.proteinInGrams).toBe(28.5);
       expect(sukiyaMenus[1]?.proteinInGrams).toBe(22.5);
@@ -124,22 +124,22 @@ describe('MenuRepository', () => {
   describe('searchByName', () => {
     it('メニュー名で部分一致検索ができる', async () => {
       const gyudonMenus = await repository.searchByName('牛丼');
-      
+
       expect(gyudonMenus).toHaveLength(2);
-      expect(gyudonMenus.map(m => m.chain)).toContain('sukiya');
-      expect(gyudonMenus.map(m => m.chain)).toContain('yoshinoya');
+      expect(gyudonMenus.map((m) => m.chain)).toContain('sukiya');
+      expect(gyudonMenus.map((m) => m.chain)).toContain('yoshinoya');
     });
 
     it('大文字小文字を区別しない', async () => {
       const results = await repository.searchByName('プレミアム');
-      
+
       expect(results).toHaveLength(1);
       expect(results[0]?.chain).toBe('matsuya');
     });
 
     it('タンパク質量で降順ソートされている', async () => {
       const gyudonMenus = await repository.searchByName('牛');
-      
+
       expect(gyudonMenus).toHaveLength(3);
       expect(gyudonMenus[0]?.proteinInGrams).toBe(22.5); // sukiya
       expect(gyudonMenus[1]?.proteinInGrams).toBe(20.4); // yoshinoya
@@ -152,9 +152,9 @@ describe('MenuRepository', () => {
       const highProteinMenus = await repository.findByNutrientFilter({
         minProtein: 20,
       });
-      
+
       expect(highProteinMenus).toHaveLength(2);
-      expect(highProteinMenus.every(m => m.proteinInGrams >= 20)).toBe(true);
+      expect(highProteinMenus.every((m) => m.proteinInGrams >= 20)).toBe(true);
     });
 
     it('複数の栄養素条件でフィルタできる', async () => {
@@ -162,31 +162,31 @@ describe('MenuRepository', () => {
         minProtein: 18,
         maxCarbs: 105,
       });
-      
+
       expect(filteredMenus).toHaveLength(2); // sukiyaとmatsuya
     });
 
     it('per（1食/100g）でフィルタできる', async () => {
       // 100gあたりのメニューを追加
-      await repository.save(new MenuItem({
-        id: 'test_100g',
-        chain: 'test',
-        name: 'Test Item',
-        per: '100g',
-        nutrients: [
-          { type: 'protein', value: 30, unit: 'g' },
-        ],
-        lastSeenAt: '2024-12-28T10:00:00Z',
-        sourceUrl: 'https://example.com',
-        sourceHash: 'test',
-      }));
+      await repository.save(
+        new MenuItem({
+          id: 'test_100g',
+          chain: 'test',
+          name: 'Test Item',
+          per: '100g',
+          nutrients: [{ type: 'protein', value: 30, unit: 'g' }],
+          lastSeenAt: '2024-12-28T10:00:00Z',
+          sourceUrl: 'https://example.com',
+          sourceHash: 'test',
+        }),
+      );
 
       const servingOnly = await repository.findByNutrientFilter({
         per: 'serving',
       });
-      
+
       expect(servingOnly).toHaveLength(3);
-      expect(servingOnly.every(m => m.per === 'serving')).toBe(true);
+      expect(servingOnly.every((m) => m.per === 'serving')).toBe(true);
     });
   });
 
@@ -197,9 +197,7 @@ describe('MenuRepository', () => {
         chain: 'new_chain',
         name: 'New Item',
         per: 'serving',
-        nutrients: [
-          { type: 'protein', value: 15, unit: 'g' },
-        ],
+        nutrients: [{ type: 'protein', value: 15, unit: 'g' }],
         lastSeenAt: '2024-12-28T10:00:00Z',
         sourceUrl: 'https://example.com',
         sourceHash: 'new',
@@ -207,7 +205,7 @@ describe('MenuRepository', () => {
 
       await repository.save(newItem);
       const found = await repository.findById('new_item');
-      
+
       expect(found).not.toBeNull();
       expect(found?.name).toBe('New Item');
     });
@@ -218,9 +216,7 @@ describe('MenuRepository', () => {
         chain: 'sukiya',
         name: '牛丼（並盛）- 更新',
         per: 'serving',
-        nutrients: [
-          { type: 'protein', value: 25, unit: 'g' },
-        ],
+        nutrients: [{ type: 'protein', value: 25, unit: 'g' }],
         lastSeenAt: '2024-12-28T11:00:00Z',
         sourceUrl: 'https://example.com/sukiya',
         sourceHash: 'updated',
@@ -228,7 +224,7 @@ describe('MenuRepository', () => {
 
       await repository.save(updated);
       const found = await repository.findById('sukiya_gyudon_regular');
-      
+
       expect(found?.name).toBe('牛丼（並盛）- 更新');
       expect(found?.proteinInGrams).toBe(25);
     });
@@ -261,7 +257,7 @@ describe('MenuRepository', () => {
 
       await repository.bulkSave(newItems);
       const testItems = await repository.findByChain('test');
-      
+
       expect(testItems).toHaveLength(2);
     });
   });
@@ -269,7 +265,7 @@ describe('MenuRepository', () => {
   describe('getAvailableChains', () => {
     it('利用可能な店舗リストを取得できる', async () => {
       const chains = await repository.getAvailableChains();
-      
+
       expect(chains).toHaveLength(3);
       expect(chains).toContain('sukiya');
       expect(chains).toContain('yoshinoya');
