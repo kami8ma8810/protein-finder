@@ -38,23 +38,20 @@ export default function RootLayout() {
 
   return (
     <Stack>
-      <Stack.Screen 
-        name="(tabs)" 
-        options={{ headerShown: false }} 
-      />
-      <Stack.Screen 
-        name="chain/[id]" 
-        options={{ 
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="chain/[id]"
+        options={{
           title: 'メニュー一覧',
-          headerBackTitle: '戻る' 
-        }} 
+          headerBackTitle: '戻る',
+        }}
       />
-      <Stack.Screen 
-        name="menu/[id]" 
-        options={{ 
+      <Stack.Screen
+        name="menu/[id]"
+        options={{
           title: 'メニュー詳細',
-          headerBackTitle: '戻る' 
-        }} 
+          headerBackTitle: '戻る',
+        }}
       />
     </Stack>
   );

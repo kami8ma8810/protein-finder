@@ -29,37 +29,40 @@ export default function ChainMenuScreen() {
   const [sortOption, setSortOption] = useState<SortOption>('protein');
   const router = useRouter();
 
-  const loadMenuItems = useCallback(async (forceRefresh = false) => {
-    try {
-      // まずAPIから取得を試みる
-      const apiService = new MenuApiService();
-      const apiResponse = await apiService.fetchMenusByChain(id, { 
-        forceRefresh 
-      });
+  const loadMenuItems = useCallback(
+    async (forceRefresh = false) => {
+      try {
+        // まずAPIから取得を試みる
+        const apiService = new MenuApiService();
+        const apiResponse = await apiService.fetchMenusByChain(id, {
+          forceRefresh,
+        });
 
-      if (apiResponse) {
-        // APIから取得できたらDBに保存
-        const db = new DatabaseService();
-        await db.initialize();
-        const repository = new MenuRepository(db);
-        await repository.bulkSave(apiResponse.items);
-        setMenuItems(sortMenuItems(apiResponse.items, sortOption));
-      } else {
-        // APIから取得できなかったらローカルDBから
-        const db = new DatabaseService();
-        await db.initialize();
-        const repository = new MenuRepository(db);
-        const localItems = await repository.findByChain(id);
-        setMenuItems(sortMenuItems(localItems, sortOption));
+        if (apiResponse) {
+          // APIから取得できたらDBに保存
+          const db = new DatabaseService();
+          await db.initialize();
+          const repository = new MenuRepository(db);
+          await repository.bulkSave(apiResponse.items);
+          setMenuItems(sortMenuItems(apiResponse.items, sortOption));
+        } else {
+          // APIから取得できなかったらローカルDBから
+          const db = new DatabaseService();
+          await db.initialize();
+          const repository = new MenuRepository(db);
+          const localItems = await repository.findByChain(id);
+          setMenuItems(sortMenuItems(localItems, sortOption));
+        }
+      } catch (error) {
+        console.error('Failed to load menu items:', error);
+        setMenuItems([]);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-    } catch (error) {
-      console.error('Failed to load menu items:', error);
-      setMenuItems([]);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  }, [id, sortOption]);
+    },
+    [id, sortOption],
+  );
 
   const sortMenuItems = useCallback((items: MenuItem[], option: SortOption): MenuItem[] => {
     const sorted = [...items];
@@ -69,12 +72,16 @@ export default function ChainMenuScreen() {
       case 'pfc':
         // PFCバランス計算（簡易版）
         return sorted.sort((a, b) => {
-          const pfcA = a.proteinInGrams / (a.proteinInGrams + 
-            (a.getNutrientInGrams('fat') || 0) + 
-            (a.getNutrientInGrams('carbs') || 0));
-          const pfcB = b.proteinInGrams / (b.proteinInGrams + 
-            (b.getNutrientInGrams('fat') || 0) + 
-            (b.getNutrientInGrams('carbs') || 0));
+          const pfcA =
+            a.proteinInGrams /
+            (a.proteinInGrams +
+              (a.getNutrientInGrams('fat') || 0) +
+              (a.getNutrientInGrams('carbs') || 0));
+          const pfcB =
+            b.proteinInGrams /
+            (b.proteinInGrams +
+              (b.getNutrientInGrams('fat') || 0) +
+              (b.getNutrientInGrams('carbs') || 0));
           return pfcB - pfcA;
         });
       case 'calories':
@@ -91,7 +98,7 @@ export default function ChainMenuScreen() {
   }, [loadMenuItems]);
 
   useEffect(() => {
-    setMenuItems(items => sortMenuItems(items, sortOption));
+    setMenuItems((items) => sortMenuItems(items, sortOption));
   }, [sortOption, sortMenuItems]);
 
   const onRefresh = useCallback(() => {
@@ -99,37 +106,31 @@ export default function ChainMenuScreen() {
     loadMenuItems(true);
   }, [loadMenuItems]);
 
-  const renderMenuItem = useCallback(({ item }: { item: MenuItem }) => (
-    <TouchableOpacity
-      style={styles.menuItem}
-      onPress={() => router.push(`/menu/${item.id}`)}
-    >
-      <View style={styles.menuContent}>
-        <View style={styles.menuInfo}>
-          <Text style={styles.menuName}>{item.name}</Text>
-          <View style={styles.nutritionRow}>
-            <Text style={styles.nutritionText}>
-              P: {item.proteinInGrams}g
-            </Text>
-            {item.getNutrientInGrams('fat') && (
-              <Text style={styles.nutritionText}>
-                F: {item.getNutrientInGrams('fat')}g
-              </Text>
-            )}
-            {item.getNutrientInGrams('carbs') && (
-              <Text style={styles.nutritionText}>
-                C: {item.getNutrientInGrams('carbs')}g
-              </Text>
-            )}
+  const renderMenuItem = useCallback(
+    ({ item }: { item: MenuItem }) => (
+      <TouchableOpacity style={styles.menuItem} onPress={() => router.push(`/menu/${item.id}`)}>
+        <View style={styles.menuContent}>
+          <View style={styles.menuInfo}>
+            <Text style={styles.menuName}>{item.name}</Text>
+            <View style={styles.nutritionRow}>
+              <Text style={styles.nutritionText}>P: {item.proteinInGrams}g</Text>
+              {item.getNutrientInGrams('fat') && (
+                <Text style={styles.nutritionText}>F: {item.getNutrientInGrams('fat')}g</Text>
+              )}
+              {item.getNutrientInGrams('carbs') && (
+                <Text style={styles.nutritionText}>C: {item.getNutrientInGrams('carbs')}g</Text>
+              )}
+            </View>
+          </View>
+          <View style={styles.proteinBadge}>
+            <Text style={styles.proteinValue}>{item.proteinInGrams}</Text>
+            <Text style={styles.proteinUnit}>g</Text>
           </View>
         </View>
-        <View style={styles.proteinBadge}>
-          <Text style={styles.proteinValue}>{item.proteinInGrams}</Text>
-          <Text style={styles.proteinUnit}>g</Text>
-        </View>
-      </View>
-    </TouchableOpacity>
-  ), [router]);
+      </TouchableOpacity>
+    ),
+    [router],
+  );
 
   const getChainDisplayName = useMemo(() => {
     const chainNames: Record<string, string> = {
@@ -142,10 +143,10 @@ export default function ChainMenuScreen() {
 
   return (
     <>
-      <Stack.Screen 
-        options={{ 
+      <Stack.Screen
+        options={{
           title: getChainDisplayName,
-        }} 
+        }}
       />
       <View style={styles.container}>
         <View style={styles.sortContainer}>
@@ -172,11 +173,7 @@ export default function ChainMenuScreen() {
             keyExtractor={(item) => item.id}
             renderItem={renderMenuItem}
             refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-                tintColor="#007AFF"
-              />
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#007AFF" />
             }
             contentContainerStyle={styles.listContainer}
             initialNumToRender={10}
@@ -185,9 +182,7 @@ export default function ChainMenuScreen() {
             removeClippedSubviews={true}
             ListEmptyComponent={
               <View style={styles.emptyContainer}>
-                <Text style={styles.emptyText}>
-                  メニューデータがありません
-                </Text>
+                <Text style={styles.emptyText}>メニューデータがありません</Text>
               </View>
             }
           />

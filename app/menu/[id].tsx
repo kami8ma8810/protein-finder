@@ -2,18 +2,23 @@
  * メニュー詳細画面
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
+  Share,
+  Linking,
+  Alert,
 } from 'react-native';
 import { useLocalSearchParams, Stack } from 'expo-router';
 import { MenuItem } from '@/core/domain/MenuItem';
 import { MenuRepository } from '@/infrastructure/database/MenuRepository';
 import { DatabaseService } from '@/infrastructure/database/DatabaseService';
+import { Colors, Typography, Spacing, BorderRadius } from '@/presentation/design-system/tokens';
 
 export default function MenuDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -61,12 +66,41 @@ export default function MenuDetailScreen() {
     return menuItem.getNutrientInGrams(type) || '-';
   };
 
+  // 共有機能
+  const handleShare = useCallback(async () => {
+    if (!menuItem) return;
+
+    try {
+      const message = `${menuItem.chain}の「${menuItem.name}」\nタンパク質: ${menuItem.proteinInGrams}g\nカロリー: ${getNutrientValue('energy')}${getNutrientValue('energy') !== '-' ? 'kcal' : ''}\n\n#タンパク質 #${menuItem.chain}`;
+
+      await Share.share({
+        message: message,
+        title: `${menuItem.name}の栄養情報`,
+      });
+    } catch (error) {
+      console.error('共有エラー:', error);
+    }
+  }, [menuItem]);
+
+  // ソースURLを開く
+  const handleOpenSource = useCallback(async () => {
+    if (!menuItem?.sourceUrl) return;
+
+    const supported = await Linking.canOpenURL(menuItem.sourceUrl);
+
+    if (supported) {
+      await Linking.openURL(menuItem.sourceUrl);
+    } else {
+      Alert.alert('エラー', 'URLを開けませんでした');
+    }
+  }, [menuItem]);
+
   return (
     <>
-      <Stack.Screen 
-        options={{ 
+      <Stack.Screen
+        options={{
           title: menuItem.name,
-        }} 
+        }}
       />
       <ScrollView style={styles.container}>
         <View style={styles.headerSection}>
@@ -135,6 +169,30 @@ export default function MenuDetailScreen() {
           <Text style={styles.metaText}>
             最終更新: {new Date(menuItem.lastSeenAt).toLocaleDateString('ja-JP')}
           </Text>
+        </View>
+
+        <View style={styles.actionSection}>
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={handleShare}
+            accessibilityLabel="栄養情報を共有"
+            accessibilityHint="タップして栄養情報を共有します"
+          >
+            <Text style={styles.actionButtonText}>📤 共有する</Text>
+          </TouchableOpacity>
+
+          {menuItem.sourceUrl && (
+            <TouchableOpacity
+              style={[styles.actionButton, styles.secondaryButton]}
+              onPress={handleOpenSource}
+              accessibilityLabel="栄養情報の出典を見る"
+              accessibilityHint="タップして公式サイトの栄養情報ページを開きます"
+            >
+              <Text style={[styles.actionButtonText, styles.secondaryButtonText]}>
+                🔗 栄養情報の出典を見る
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </ScrollView>
     </>
@@ -264,5 +322,31 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#8E8E93',
     marginBottom: 4,
+  },
+  actionSection: {
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    gap: 12,
+  },
+  actionButton: {
+    backgroundColor: Colors.primary.blue,
+    paddingVertical: Spacing.padding.button,
+    paddingHorizontal: Spacing.lg,
+    borderRadius: BorderRadius.button,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  secondaryButton: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: Colors.primary.blue,
+  },
+  actionButtonText: {
+    fontSize: Typography.fontSize.body,
+    fontWeight: Typography.fontWeight.semibold,
+    color: Colors.background.primary,
+  },
+  secondaryButtonText: {
+    color: Colors.primary.blue,
   },
 });

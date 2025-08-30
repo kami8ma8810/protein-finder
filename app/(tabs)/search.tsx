@@ -3,19 +3,17 @@
  */
 
 import React, { useState, useCallback } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-} from 'react-native';
+import { View, Text, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MenuItem } from '@/core/domain/MenuItem';
 import { MenuRepository } from '@/infrastructure/database/MenuRepository';
 import { DatabaseService } from '@/infrastructure/database/DatabaseService';
-import { SearchBar, LoadingSpinner, AccessibleCard, ErrorBoundary } from '@/presentation/components/common';
+import {
+  SearchBar,
+  LoadingSpinner,
+  AccessibleCard,
+  ErrorBoundary,
+} from '@/presentation/components/common';
 import { Colors, Typography, Spacing } from '@/presentation/design-system/tokens';
 
 export default function SearchScreen() {
@@ -45,23 +43,26 @@ export default function SearchScreen() {
     }
   }, [searchQuery]);
 
-  const renderMenuItem = useCallback(({ item }: { item: MenuItem }) => (
-    <AccessibleCard
-      title={item.name}
-      subtitle={`${item.chain} • ${item.caloriesInKcal}kcal`}
-      onPress={() => router.push(`/menu/${item.id}`)}
-      badge={`${item.proteinInGrams}g`}
-      badgeColor={Colors.nutrition.protein}
-      showChevron
-      accessibilityLabel={`${item.name}、${item.chain}、タンパク質${item.proteinInGrams}グラム`}
-      accessibilityHint="タップして詳細を表示"
-      testID={`search-result-${item.id}`}
-    />
-  ), [router]);
+  const renderMenuItem = useCallback(
+    ({ item }: { item: MenuItem }) => (
+      <AccessibleCard
+        title={item.name}
+        subtitle={`${item.chain} • ${item.caloriesInKcal}kcal`}
+        onPress={() => router.push(`/menu/${item.id}`)}
+        badge={`${item.proteinInGrams}g`}
+        badgeColor={Colors.nutrition.protein}
+        showChevron
+        accessibilityLabel={`${item.name}、${item.chain}、タンパク質${item.proteinInGrams}グラム`}
+        accessibilityHint="タップして詳細を表示"
+        testID={`search-result-${item.id}`}
+      />
+    ),
+    [router],
+  );
 
   return (
     <ErrorBoundary>
-      <KeyboardAvoidingView 
+      <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
@@ -85,18 +86,12 @@ export default function SearchScreen() {
           />
         ) : searchQuery.trim() ? (
           <View style={styles.centerContainer}>
-            <Text style={styles.noResultsText}>
-              検索結果がありません
-            </Text>
+            <Text style={styles.noResultsText}>検索結果がありません</Text>
           </View>
         ) : (
           <View style={styles.centerContainer}>
-            <Text style={styles.instructionText}>
-              メニュー名を入力して検索
-            </Text>
-            <Text style={styles.subInstructionText}>
-              複数の店舗から横断的に検索できます
-            </Text>
+            <Text style={styles.instructionText}>メニュー名を入力して検索</Text>
+            <Text style={styles.subInstructionText}>複数の店舗から横断的に検索できます</Text>
           </View>
         )}
       </KeyboardAvoidingView>

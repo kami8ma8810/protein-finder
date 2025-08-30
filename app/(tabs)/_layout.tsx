@@ -18,9 +18,7 @@ export default function TabsLayout() {
         options={{
           title: '店舗一覧',
           tabBarLabel: '店舗',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="restaurant" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="restaurant" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -28,9 +26,7 @@ export default function TabsLayout() {
         options={{
           title: '横断検索',
           tabBarLabel: '検索',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="search" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="search" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
@@ -38,9 +34,7 @@ export default function TabsLayout() {
         options={{
           title: '設定',
           tabBarLabel: '設定',
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="settings" size={size} color={color} />
-          ),
+          tabBarIcon: ({ color, size }) => <Ionicons name="settings" size={size} color={color} />,
         }}
       />
     </Tabs>
