@@ -7,13 +7,17 @@ A mobile application for searching and comparing protein content from official n
 ## Main Use Cases
 
 ### Use Case A: Store-specific Menu Search (Primary)
+
 "I'm going to Sukiya today, want to know high-protein menu items"
+
 1. Select "Sukiya" from store list
 2. View Sukiya's menu sorted by protein content
 3. Re-sort by PFC balance or price
 
 ### Use Case B: Cross-store Menu Search (Secondary)
+
 "Want to eat gyudon, which store has the highest protein?"
+
 1. Search "gyudon" by menu name
 2. Compare gyudon from all stores
 3. Find the optimal choice by protein content
@@ -30,6 +34,7 @@ A mobile application for searching and comparing protein content from official n
 ## Tech Stack
 
 ### Mobile App
+
 - **Framework**: React Native + Expo (SDK 50+)
 - **Language**: TypeScript
 - **State Management**: Zustand
@@ -39,6 +44,7 @@ A mobile application for searching and comparing protein content from official n
 - **Testing**: Jest, React Testing Library
 
 ### Backend (Coming Soon)
+
 - **Runtime**: Node.js 20
 - **Scraping**: Playwright, Cheerio
 - **Database**: PostgreSQL/SQLite
@@ -48,7 +54,8 @@ A mobile application for searching and comparing protein content from official n
 ## Getting Started
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - npm or yarn
 - Expo CLI
 - iOS Simulator (Mac) or Android Emulator
@@ -146,12 +153,15 @@ This project follows **Clean Architecture** principles:
 ## Development Principles
 
 ### TDD (Test-Driven Development)
+
 We follow the Red-Green-Refactor cycle:
+
 1. 🔴 Write a failing test
 2. 🟢 Write minimal code to pass
 3. 🔵 Refactor for quality
 
 ### SOLID Principles
+
 - **S**ingle Responsibility: Each class has one reason to change
 - **O**pen/Closed: Open for extension, closed for modification
 - **L**iskov Substitution: Subtypes must be substitutable
@@ -159,6 +169,7 @@ We follow the Red-Green-Refactor cycle:
 - **D**ependency Inversion: Depend on abstractions
 
 ### Accessibility First
+
 - WCAG Level AA compliance target
 - Screen reader support
 - Keyboard navigation
@@ -182,6 +193,7 @@ We welcome contributions! Please see [CONTRIBUTING.md](./CONTRIBUTING.md) for de
 ### Commit Convention
 
 We use conventional commits:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation changes
@@ -193,6 +205,7 @@ We use conventional commits:
 ## Data Sources
 
 All nutritional data is sourced from official restaurant chain websites:
+
 - Data is updated daily
 - Source URLs are always provided
 - Last update timestamp is displayed
@@ -200,6 +213,7 @@ All nutritional data is sourced from official restaurant chain websites:
 ## Privacy Policy
 
 This app:
+
 - Does not collect personal data
 - Does not use tracking or analytics (except crash reports)
 - Stores data locally on your device

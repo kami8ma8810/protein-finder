@@ -1,13 +1,16 @@
 # React Native パフォーマンス最適化ガイドライン
 
 ## 概要
+
 React Nativeアプリケーションのパフォーマンスを最適化するためのガイドラインです。
 本プロジェクトでは、ユーザー体験を最優先に考え、スムーズな動作を実現するために以下の最適化手法を採用しています。
 
 ## 1. メモ化戦略
 
 ### React.memo の使用
+
 コンポーネントの不要な再レンダリングを防ぐため、以下の条件でReact.memoを使用：
+
 - リストアイテムコンポーネント
 - 頻繁に再レンダリングされる親を持つ子コンポーネント
 - propsの変更が少ないコンポーネント
@@ -22,19 +25,26 @@ const MenuItemComponent = React.memo(({ item, onPress }) => {
 ```
 
 ### useCallback の使用
+
 関数の再生成を防ぐため、以下の場面でuseCallbackを使用：
+
 - 子コンポーネントに渡すイベントハンドラー
 - useEffectの依存配列に含まれる関数
 - React.memoでラップされたコンポーネントに渡す関数
 
 ```typescript
-const handleMenuPress = useCallback((itemId: string) => {
-  router.push(`/menu/${itemId}`);
-}, [router]);
+const handleMenuPress = useCallback(
+  (itemId: string) => {
+    router.push(`/menu/${itemId}`);
+  },
+  [router],
+);
 ```
 
 ### useMemo の使用
+
 高コストな計算の結果をメモ化：
+
 - フィルタリングやソート処理
 - 複雑な計算を伴うデータ変換
 - 大規模なデータセットの処理
@@ -48,12 +58,13 @@ const sortedMenuItems = useMemo(() => {
 ## 2. FlatList 最適化
 
 ### 必須の最適化項目
+
 ```typescript
 <FlatList
   data={items}
   keyExtractor={(item) => item.id}
   renderItem={renderItem}
-  
+
   // パフォーマンス最適化プロパティ
   getItemLayout={(data, index) => ({
     length: ITEM_HEIGHT,
@@ -64,7 +75,7 @@ const sortedMenuItems = useMemo(() => {
   maxToRenderPerBatch={10}
   windowSize={10}
   removeClippedSubviews={true}
-  
+
   // ビューポート外のアイテムの事前レンダリング
   onEndReachedThreshold={0.5}
   onEndReached={loadMoreItems}
@@ -72,7 +83,9 @@ const sortedMenuItems = useMemo(() => {
 ```
 
 ### FlashList の導入検討
+
 大量のアイテム（100件以上）を扱う場合は、ShopifyのFlashListの使用を検討：
+
 ```bash
 npm install @shopify/flash-list
 ```
@@ -80,6 +93,7 @@ npm install @shopify/flash-list
 ## 3. useEffect の最適化
 
 ### 依存配列の適切な管理
+
 ```typescript
 // ❌ Bad: 毎回実行される
 useEffect(() => {
@@ -93,10 +107,11 @@ useEffect(() => {
 ```
 
 ### クリーンアップの実装
+
 ```typescript
 useEffect(() => {
   const subscription = subscribeToData();
-  
+
   return () => {
     subscription.unsubscribe();
   };
@@ -104,19 +119,20 @@ useEffect(() => {
 ```
 
 ### 非同期処理の適切な処理
+
 ```typescript
 useEffect(() => {
   let isMounted = true;
-  
+
   const fetchData = async () => {
     const data = await loadData();
     if (isMounted) {
       setData(data);
     }
   };
-  
+
   fetchData();
-  
+
   return () => {
     isMounted = false;
   };
@@ -126,6 +142,7 @@ useEffect(() => {
 ## 4. 画像の最適化
 
 ### React Native Fast Imageの使用
+
 ```typescript
 import FastImage from 'react-native-fast-image';
 
@@ -142,6 +159,7 @@ import FastImage from 'react-native-fast-image';
 ## 5. アニメーション最適化
 
 ### useNativeDriverの使用
+
 ```typescript
 Animated.timing(animatedValue, {
   toValue: 1,
@@ -151,6 +169,7 @@ Animated.timing(animatedValue, {
 ```
 
 ### InteractionManagerの活用
+
 ```typescript
 InteractionManager.runAfterInteractions(() => {
   // 重い処理を実行
@@ -161,6 +180,7 @@ InteractionManager.runAfterInteractions(() => {
 ## 6. 状態管理の最適化
 
 ### 状態の分割
+
 ```typescript
 // ❌ Bad: 大きな状態オブジェクト
 const [state, setState] = useState({
@@ -180,17 +200,21 @@ const [filter, setFilter] = useState('');
 ## 7. デバッグとプロファイリング
 
 ### React DevToolsの活用
+
 ```bash
 npx react-devtools
 ```
 
 ### Flipperの使用
+
 - Network Inspector
 - Layout Inspector
 - React DevTools Integration
 
 ### console.logの削除
+
 本番環境では必ずconsole.logを削除：
+
 ```javascript
 // babel.config.js
 module.exports = {
@@ -203,6 +227,7 @@ module.exports = {
 ## 8. バンドルサイズの最適化
 
 ### 不要な依存関係の削除
+
 ```bash
 # パッケージサイズの確認
 npm ls --depth=0
@@ -212,6 +237,7 @@ npx depcheck
 ```
 
 ### 動的インポートの活用
+
 ```typescript
 const HeavyComponent = lazy(() => import('./HeavyComponent'));
 ```
@@ -219,6 +245,7 @@ const HeavyComponent = lazy(() => import('./HeavyComponent'));
 ## 9. メトリクスとモニタリング
 
 ### 重要なメトリクス
+
 - Time to Interactive (TTI)
 - First Contentful Paint (FCP)
 - FPS (Frames Per Second)
@@ -226,6 +253,7 @@ const HeavyComponent = lazy(() => import('./HeavyComponent'));
 - Bundle Size
 
 ### パフォーマンス測定
+
 ```typescript
 import { PerformanceObserver } from 'perf_hooks';
 
@@ -240,6 +268,7 @@ const measure = (name: string, fn: () => void) => {
 ## 10. チェックリスト
 
 ### 開発時
+
 - [ ] React.memoを適切に使用しているか
 - [ ] useCallbackで関数をメモ化しているか
 - [ ] useMemoで高コストな計算をメモ化しているか
@@ -247,6 +276,7 @@ const measure = (name: string, fn: () => void) => {
 - [ ] useEffectの依存配列を正しく設定しているか
 
 ### リリース前
+
 - [ ] console.logを削除したか
 - [ ] 不要な依存関係を削除したか
 - [ ] パフォーマンステストを実施したか
@@ -255,7 +285,9 @@ const measure = (name: string, fn: () => void) => {
 ## 11. Expo SDK 53 固有の最適化
 
 ### New Architecture の活用
+
 SDK 53ではNew Architectureがデフォルトで有効化：
+
 ```json
 // app.json
 {
@@ -266,12 +298,14 @@ SDK 53ではNew Architectureがデフォルトで有効化：
 ```
 
 ### Expo Atlas でバンドルサイズ分析
+
 ```bash
 # バンドルサイズの可視化
 EXPO_ATLAS=1 npx expo start
 ```
 
 ### expo-audio の使用（expo-avより高速）
+
 ```typescript
 // ❌ Old: expo-av
 import { Audio } from 'expo-av';
@@ -281,6 +315,7 @@ import { useAudioPlayer } from 'expo-audio';
 ```
 
 ### Edge-to-Edge Display（Android）
+
 ```json
 // app.json
 {
@@ -293,9 +328,11 @@ import { useAudioPlayer } from 'expo-audio';
 ```
 
 ### ビルド時間の最適化
+
 Expo SDK 53では、プリビルドモジュールによりAndroidビルド時間が短縮
 
 ## 参考資料
+
 - [React Native Performance](https://reactnative.dev/docs/performance)
 - [React.memo](https://react.dev/reference/react/memo)
 - [Understanding useMemo and useCallback](https://www.joshwcomeau.com/react/usememo-and-usecallback/)
