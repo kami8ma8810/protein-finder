@@ -1,0 +1,28 @@
+<svg width="1242" height="2688" viewBox="0 0 1242 2688" xmlns="http://www.w3.org/2000/svg">
+  <!-- 背景 -->
+  <rect width="1242" height="2688" fill="#34C759"/>
+  
+  <!-- 中央のアイコン -->
+  <g transform="translate(621, 1344)">
+    <!-- ボトル本体 -->
+    <rect x="-150" y="-200" width="300" height="350" rx="30" fill="white" opacity="0.95"/>
+    
+    <!-- キャップ -->
+    <rect x="-100" y="-250" width="200" height="60" rx="20" fill="white"/>
+    
+    <!-- ラベル部分 -->
+    <rect x="-150" y="-50" width="300" height="120" fill="#FF6B6B" opacity="0.8"/>
+    
+    <!-- Pの文字 -->
+    <text x="0" y="30" font-family="Arial, sans-serif" font-size="140" font-weight="bold" text-anchor="middle" fill="white">P</text>
+    
+    <!-- 目盛り線 -->
+    <line x1="-120" y1="-150" x2="-80" y2="-150" stroke="#34C759" stroke-width="8"/>
+    <line x1="-120" y1="-100" x2="-80" y2="-100" stroke="#34C759" stroke-width="8"/>
+    <line x1="-120" y1="-50" x2="-80" y2="-50" stroke="#34C759" stroke-width="8"/>
+  </g>
+  
+  <!-- アプリ名 -->
+  <text x="621" y="1700" font-family="Arial, sans-serif" font-size="72" font-weight="bold" text-anchor="middle" fill="white">Protein Finder</text>
+  <text x="621" y="1780" font-family="Arial, sans-serif" font-size="36" text-anchor="middle" fill="white" opacity="0.8">高タンパク質メニューを簡単検索</text>
+</svg>
