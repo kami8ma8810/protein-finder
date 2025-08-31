@@ -14,6 +14,8 @@ import {
   SearchBar,
 } from '@/presentation/components/common';
 import { Spacing } from '@/presentation/design-system/tokens';
+import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
+import { getChainIcon as getChainIconData } from '@/data/chainData';
 
 interface ChainSection {
   title: string;
@@ -52,18 +54,39 @@ export default function ChainsScreen() {
     loadChains();
   }, [loadChains]);
 
+  // 業態に応じたアイコンを返す
+  const getChainIcon = useCallback((chainId: string) => {
+    const iconInfo = getChainIconData(chainId);
+    // サイズと色を上書き
+    const modifiedIconInfo = { ...iconInfo, size: 20, color: '#666' };
+    
+    switch (modifiedIconInfo.iconFamily) {
+      case 'MaterialCommunityIcons':
+        return <MaterialCommunityIcons name={modifiedIconInfo.iconName as any} size={modifiedIconInfo.size} color={modifiedIconInfo.color} />;
+      case 'MaterialIcons':
+        return <MaterialIcons name={modifiedIconInfo.iconName as any} size={modifiedIconInfo.size} color={modifiedIconInfo.color} />;
+      case 'Ionicons':
+      default:
+        return <Ionicons name={modifiedIconInfo.iconName as any} size={modifiedIconInfo.size} color={modifiedIconInfo.color} />;
+    }
+  }, []);
+
   const renderChainItem = useCallback(
     ({ item }: { item: ChainInfo }) => (
-      <AccessibleCard
-        title={item.displayName}
-        onPress={() => router.push(`/chain/${item.id}`)}
-        showChevron
-        accessibilityLabel={`${item.displayName}のメニューを表示`}
-        accessibilityHint="タップして店舗のメニューを表示します"
-        testID={`chain-${item.id}`}
-      />
+      <View style={styles.chainItemContainer}>
+        <View style={styles.chainIconWrapper}>
+          {getChainIcon(item.id)}
+        </View>
+        <AccessibleCard
+          title={item.displayName}
+          onPress={() => router.push(`/chain/${item.id}`)}
+          showChevron
+          testID={`chain-${item.id}`}
+          style={styles.chainCardContent}
+        />
+      </View>
     ),
-    [router],
+    [router, getChainIcon],
   );
 
   const renderSectionHeader = useCallback(
@@ -91,17 +114,26 @@ export default function ChainsScreen() {
       'わ行': /^[わ-んワ-ン]/,
     };
 
+    // 漢字店名の読み方マッピング
+    const kanjiReadings: { [key: string]: string } = {
+      '吉野家': 'よしのや',
+      '松屋': 'まつや',
+      '大戸屋': 'おおとや',
+    };
+
     // グループごとに店舗を分類
     const groupedChains: { [key: string]: ChainInfo[] } = {};
     const alphabetChains: ChainInfo[] = [];
 
     chainsToSort.forEach(chain => {
-      const firstChar = chain.displayName.charAt(0);
+      // 漢字店名の場合は読み方を取得
+      const displayNameForGrouping = kanjiReadings[chain.displayName] || chain.displayName;
+      const firstChar = displayNameForGrouping.charAt(0);
       let grouped = false;
 
       // 五十音グループでチェック
       for (const [group, pattern] of Object.entries(kanaGroups)) {
-        if (pattern.test(chain.displayName)) {
+        if (pattern.test(displayNameForGrouping)) {
           if (!groupedChains[group]) {
             groupedChains[group] = [];
           }
@@ -111,9 +143,9 @@ export default function ChainsScreen() {
         }
       }
 
-      // 日本語でもアルファベットでもない場合（漢字で始まるなど）は、読み方を推測
+      // 日本語でもアルファベットでもない場合（未登録の漢字など）
       if (!grouped && firstChar.match(/[\u4E00-\u9FAF]/)) {
-        // 漢字の場合は最初の行に入れる（実際のアプリでは読み仮名データが必要）
+        // 漢字の場合は「その他」に入れる
         if (!groupedChains['その他']) {
           groupedChains['その他'] = [];
         }
@@ -214,7 +246,6 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     paddingVertical: Spacing.md,
-    paddingHorizontal: Spacing.padding.screen,
   },
   sectionHeader: {
     backgroundColor: '#F5F5F5',
@@ -227,5 +258,20 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#666',
     letterSpacing: 0.5,
+  },
+  chainItemContainer: {
+    width: '100%',
+    paddingHorizontal: Spacing.padding.screen,
+  },
+  chainIconWrapper: {
+    position: 'absolute',
+    left: 32,
+    top: '50%',
+    transform: [{ translateY: -10 }],
+    zIndex: 1,
+  },
+  chainCardContent: {
+    flex: 1,
+    paddingLeft: 48,
   },
 });
