@@ -137,6 +137,13 @@ export default function ChainMenuScreen() {
       sukiya: 'すき家',
       yoshinoya: '吉野家',
       matsuya: '松屋',
+      nakau: 'なか卯',
+      mcdonalds: 'マクドナルド',
+      mosburger: 'モスバーガー',
+      subway: 'サブウェイ',
+      ootoya: '大戸屋',
+      gusto: 'ガスト',
+      kfc: 'ケンタッキー',
     };
     return chainNames[id] || id;
   }, [id]);

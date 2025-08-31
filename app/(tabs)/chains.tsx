@@ -27,36 +27,11 @@ export default function ChainsScreen() {
   const loadChains = useCallback(async () => {
     try {
       const result = await apiService.fetchAvailableChains();
-      setChains(result);
+      if (result && result.length > 0) {
+        setChains(result);
+      }
     } catch (error) {
       console.error('Failed to load chains:', error);
-      // ハードコーディングされたフォールバック
-      setChains([
-        {
-          id: 'sukiya',
-          name: 'sukiya',
-          displayName: 'すき家',
-          websiteUrl: 'https://www.sukiya.jp/',
-        },
-        {
-          id: 'yoshinoya',
-          name: 'yoshinoya',
-          displayName: '吉野家',
-          websiteUrl: 'https://www.yoshinoya.com/',
-        },
-        {
-          id: 'matsuya',
-          name: 'matsuya',
-          displayName: '松屋',
-          websiteUrl: 'https://www.matsuyafoods.co.jp/',
-        },
-        {
-          id: 'nakau',
-          name: 'nakau',
-          displayName: 'なか卯',
-          websiteUrl: 'https://www.nakau.co.jp/',
-        },
-      ]);
     } finally {
       setLoading(false);
       setRefreshing(false);
