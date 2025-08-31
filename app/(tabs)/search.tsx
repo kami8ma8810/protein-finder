@@ -50,7 +50,7 @@ export default function SearchScreen() {
         subtitle={`${item.chain} • ${item.caloriesInKcal}kcal`}
         onPress={() => router.push(`/menu/${item.id}`)}
         badge={`${item.proteinInGrams}g`}
-        badgeColor={Colors.nutrition.protein}
+        badgeColor="#DC143C"
         showChevron
         accessibilityLabel={`${item.name}、${item.chain}、タンパク質${item.proteinInGrams}グラム`}
         accessibilityHint="タップして詳細を表示"

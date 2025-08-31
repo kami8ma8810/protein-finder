@@ -30,7 +30,7 @@ export default function RootLayout() {
   if (!isInitialized) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color="#DC143C" />
         <Text style={styles.loadingText}>準備中...</Text>
       </View>
     );

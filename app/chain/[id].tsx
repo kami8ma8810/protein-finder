@@ -171,7 +171,7 @@ export default function ChainMenuScreen() {
 
         {loading ? (
           <View style={styles.centerContainer}>
-            <ActivityIndicator size="large" color="#007AFF" />
+            <ActivityIndicator size="large" color="#DC143C" />
             <Text style={styles.loadingText}>メニューを読み込み中...</Text>
           </View>
         ) : (
@@ -180,7 +180,7 @@ export default function ChainMenuScreen() {
             keyExtractor={(item) => item.id}
             renderItem={renderMenuItem}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#007AFF" />
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#DC143C" />
             }
             contentContainerStyle={styles.listContainer}
             initialNumToRender={10}
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
   },
   proteinBadge: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#FFE5E5',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -271,11 +271,11 @@ const styles = StyleSheet.create({
   proteinValue: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#2E7D32',
+    color: '#DC143C',
   },
   proteinUnit: {
     fontSize: 12,
-    color: '#2E7D32',
+    color: '#DC143C',
     marginLeft: 2,
   },
   emptyContainer: {

@@ -76,7 +76,7 @@ export default function MenuDetailScreen() {
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+        <ActivityIndicator size="large" color="#DC143C" />
       </View>
     );
   }
@@ -209,7 +209,7 @@ export default function MenuDetailScreen() {
             accessibilityLabel="栄養情報を共有"
             accessibilityHint="タップして栄養情報を共有します"
           >
-            <Text style={styles.actionButtonText}>📤 共有する</Text>
+            <Text style={styles.actionButtonText}>共有する</Text>
           </TouchableOpacity>
 
           {menuItem.sourceUrl && (
@@ -220,7 +220,7 @@ export default function MenuDetailScreen() {
               accessibilityHint="タップして公式サイトの栄養情報ページを開きます"
             >
               <Text style={[styles.actionButtonText, styles.secondaryButtonText]}>
-                🔗 栄養情報の出典を見る
+                栄養情報の出典を見る
               </Text>
             </TouchableOpacity>
           )}
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
   },
   mainNutritionCard: {
-    backgroundColor: '#E8F5E9',
+    backgroundColor: '#FFE5E5',
     marginHorizontal: 16,
     marginVertical: 16,
     borderRadius: 12,
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   },
   proteinLabel: {
     fontSize: 16,
-    color: '#2E7D32',
+    color: '#DC143C',
     marginBottom: 8,
   },
   proteinValueContainer: {
@@ -285,11 +285,11 @@ const styles = StyleSheet.create({
   proteinValue: {
     fontSize: 48,
     fontWeight: 'bold',
-    color: '#2E7D32',
+    color: '#DC143C',
   },
   proteinUnit: {
     fontSize: 24,
-    color: '#2E7D32',
+    color: '#DC143C',
     marginLeft: 4,
   },
   nutritionGrid: {
@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   actionButton: {
-    backgroundColor: Colors.primary.blue,
+    backgroundColor: '#DC143C',
     paddingVertical: Spacing.padding.button,
     paddingHorizontal: Spacing.lg,
     borderRadius: BorderRadius.button,
@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
   secondaryButton: {
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: Colors.primary.blue,
+    borderColor: '#DC143C',
   },
   actionButtonText: {
     fontSize: Typography.fontSize.body,
@@ -378,6 +378,6 @@ const styles = StyleSheet.create({
     color: Colors.background.primary,
   },
   secondaryButtonText: {
-    color: Colors.primary.blue,
+    color: '#DC143C',
   },
 });
