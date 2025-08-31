@@ -102,7 +102,7 @@ export default function MenuDetailScreen() {
 
     try {
       const chainName = getChainDisplayName(menuItem.chain);
-      const message = `${chainName}の「${menuItem.name}」\nタンパク質: ${menuItem.proteinInGrams}g\nカロリー: ${getNutrientValue('energy')}${getNutrientValue('energy') !== '-' ? 'kcal' : ''}\n\n#タンパク質 #${chainName}`;
+      const message = `${chainName}の「${menuItem.name}」\nたんぱく質: ${menuItem.proteinInGrams}g\nカロリー: ${getNutrientValue('energy')}${getNutrientValue('energy') !== '-' ? 'kcal' : ''}\n\n#たんぱく質 #${chainName}`;
 
       await Share.share({
         message: message,
@@ -141,7 +141,7 @@ export default function MenuDetailScreen() {
 
         <View style={styles.mainNutritionCard}>
           <View style={styles.proteinContainer}>
-            <Text style={styles.proteinLabel}>タンパク質</Text>
+            <Text style={styles.proteinLabel}>たんぱく質</Text>
             <View style={styles.proteinValueContainer}>
               <Text style={styles.proteinValue}>{menuItem.proteinInGrams}</Text>
               <Text style={styles.proteinUnit}>g</Text>
