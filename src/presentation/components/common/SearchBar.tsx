@@ -9,6 +9,7 @@ import {
   Platform,
   AccessibilityInfo,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, BorderRadius } from '../../design-system/tokens';
 
 interface SearchBarProps {
@@ -84,7 +85,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   return (
     <View style={styles.container}>
       <View style={[styles.searchContainer, isFocused && styles.searchContainerFocused]}>
-        <Text style={styles.searchIcon}>🔍</Text>
+        <Ionicons name="search" size={20} color={Colors.label.tertiary} style={styles.searchIcon} />
 
         <TextInput
           ref={inputRef}
@@ -102,23 +103,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           clearButtonMode="never"
           autoCorrect={false}
           autoCapitalize="none"
-          accessibilityLabel={`検索フィールド、現在の値: ${value || '空'}`}
-          accessibilityHint="検索キーワードを入力してください"
           accessibilityRole="search"
-          testID={testID}
+          accessibilityLabel="検索"
+          testID={testID || 'search-input'}
+          nativeID="search-input"
         />
 
         {value.length > 0 && (
           <TouchableOpacity
             onPress={handleClear}
             style={styles.clearButton}
-            accessibilityLabel="検索をクリア"
             accessibilityRole="button"
             hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           >
-            <View style={styles.clearIcon}>
-              <Text style={styles.clearIconText}>✕</Text>
-            </View>
+            <Ionicons name="close-circle" size={18} color={Colors.label.tertiary} />
           </TouchableOpacity>
         )}
       </View>
@@ -128,7 +126,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <TouchableOpacity
             onPress={handleCancel}
             style={styles.cancelButton}
-            accessibilityLabel="キャンセル"
             accessibilityRole="button"
           >
             <Text style={styles.cancelText}>キャンセル</Text>
@@ -162,7 +159,6 @@ const styles = StyleSheet.create({
     borderColor: Colors.primary.blue,
   },
   searchIcon: {
-    fontSize: 16,
     marginRight: Spacing.xs,
   },
   input: {

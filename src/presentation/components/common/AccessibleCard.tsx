@@ -9,6 +9,7 @@ import {
   AccessibilityRole,
   GestureResponderEvent,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Colors, Typography, Spacing, BorderRadius, Shadows } from '../../design-system/tokens';
 
 interface AccessibleCardProps {
@@ -84,7 +85,13 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
             </Text>
           </View>
         )}
-        {showChevron && <Text style={styles.chevron}>›</Text>}
+        {showChevron && (
+          <Ionicons 
+            name="chevron-forward" 
+            size={20} 
+            color={Colors.label.tertiary}
+          />
+        )}
       </View>
     </View>
   );
@@ -95,7 +102,7 @@ export const AccessibleCard: React.FC<AccessibleCardProps> = ({
         onPress={onPress}
         disabled={disabled}
         accessibilityRole={accessibilityRole}
-        accessibilityLabel={accessibilityLabel || title}
+        accessibilityLabel={accessibilityLabel}
         accessibilityHint={accessibilityHint}
         accessibilityState={{
           disabled,
@@ -146,7 +153,6 @@ const styles = StyleSheet.create({
     fontSize: Typography.fontSize.headline,
     fontWeight: Typography.fontWeight.semibold,
     color: Colors.label.primary,
-    marginBottom: Spacing.xxs,
   },
   subtitle: {
     fontSize: Typography.fontSize.subheadline,
@@ -174,11 +180,6 @@ const styles = StyleSheet.create({
     color: Colors.background.primary,
     fontSize: Typography.fontSize.caption2,
     fontWeight: Typography.fontWeight.bold,
-  },
-  chevron: {
-    fontSize: 24,
-    color: Colors.label.tertiary,
-    fontWeight: Typography.fontWeight.semibold,
   },
 });
 
