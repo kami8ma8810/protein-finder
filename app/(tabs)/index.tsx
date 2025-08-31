@@ -13,16 +13,19 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { MenuApiService } from '@/infrastructure/api/MenuApiService';
 import { ChainInfo } from '@/core/services/IMenuApiService';
 import { MenuItem } from '@/core/domain/MenuItem';
+import { getRandomProteinTip } from '@/data/proteinTips';
+import { getChainIcon as getChainIconData } from '@/data/chainData';
 
 export default function HomeScreen() {
   const router = useRouter();
   const [refreshing, setRefreshing] = useState(false);
   const [popularChains, setPopularChains] = useState<ChainInfo[]>([]);
   const [recommendedItems, setRecommendedItems] = useState<MenuItem[]>([]);
+  const [currentTip, setCurrentTip] = useState<string>('');
 
   const loadHomeData = useCallback(async () => {
     try {
@@ -58,15 +61,34 @@ export default function HomeScreen() {
 
   useEffect(() => {
     loadHomeData();
+    // 初回表示時にTipsを設定
+    setCurrentTip(getRandomProteinTip());
   }, [loadHomeData]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     loadHomeData();
+    // リフレッシュ時に新しいTipsを表示
+    setCurrentTip(getRandomProteinTip());
   }, [loadHomeData]);
 
   const getChainDisplayName = (chain: ChainInfo) => {
     return chain.displayName || chain.name;
+  };
+
+  // 業態に応じたアイコンを返す
+  const getChainIcon = (chainId: string) => {
+    const iconInfo = getChainIconData(chainId);
+    
+    switch (iconInfo.iconFamily) {
+      case 'MaterialCommunityIcons':
+        return <MaterialCommunityIcons name={iconInfo.iconName as any} size={iconInfo.size} color={iconInfo.color} />;
+      case 'MaterialIcons':
+        return <MaterialIcons name={iconInfo.iconName as any} size={iconInfo.size} color={iconInfo.color} />;
+      case 'Ionicons':
+      default:
+        return <Ionicons name={iconInfo.iconName as any} size={iconInfo.size} color={iconInfo.color} />;
+    }
   };
 
 
@@ -86,8 +108,8 @@ export default function HomeScreen() {
         end={{ x: 1, y: 1 }}
       >
         <View style={styles.headerContent}>
-          <Text style={styles.appTitle}>タンパク質ファインダー</Text>
-          <Text style={styles.appDescription}>外食チェーンのタンパク質量をすぐに検索</Text>
+          <Text style={styles.appTitle}>たんぱく質ファインダー</Text>
+          <Text style={styles.appDescription}>チェーン店のたんぱく質量をすぐに検索</Text>
         </View>
       </LinearGradient>
 
@@ -98,7 +120,7 @@ export default function HomeScreen() {
           onPress={() => router.push('/(tabs)/search')}
         >
           <Ionicons name="search" size={24} color="#DC143C" />
-          <Text style={styles.searchButtonText}>メニューを検索</Text>
+          <Text style={styles.searchButtonText}>食べたいメニューを検索</Text>
           <Ionicons name="chevron-forward" size={20} color="#999" />
         </TouchableOpacity>
       </View>
@@ -111,26 +133,27 @@ export default function HomeScreen() {
             <Text style={styles.seeAllText}>すべて →</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.chainGrid}>
-          {popularChains.slice(0, 8).map((chain) => (
-            <TouchableOpacity
-              key={chain.id}
-              style={styles.chainCard}
-              onPress={() => router.push(`/chain/${chain.id}`)}
-            >
-              <View style={styles.chainIconPlaceholder} />
-              <Text style={styles.chainName} numberOfLines={1}>
-                {getChainDisplayName(chain)}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+        {popularChains.slice(0, 4).map((chain) => (
+          <TouchableOpacity
+            key={chain.id}
+            style={styles.chainListItem}
+            onPress={() => router.push(`/chain/${chain.id}`)}
+          >
+            <View style={styles.chainListIconContainer}>
+              {getChainIcon(chain.id)}
+            </View>
+            <Text style={styles.chainListName}>
+              {getChainDisplayName(chain)}
+            </Text>
+            <Ionicons name="chevron-forward" size={20} color="#999" />
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* 高タンパクメニューランキング */}
       <View style={styles.section}>
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>高タンパクメニュー TOP5</Text>
+          <Text style={styles.sectionTitle}>高たんぱくメニュー TOP5</Text>
         </View>
         {recommendedItems.map((item, index) => (
           <TouchableOpacity
@@ -146,7 +169,10 @@ export default function HomeScreen() {
                 {item.name}
               </Text>
               <Text style={styles.recommendChain}>
-                {getChainDisplayName({ id: item.chain, name: item.chain, displayName: item.chain })}
+                {(() => {
+                  const chainInfo = popularChains.find(c => c.id === item.chain);
+                  return chainInfo?.displayName || item.chain;
+                })()}
               </Text>
             </View>
             <View style={styles.proteinBadge}>
@@ -157,11 +183,13 @@ export default function HomeScreen() {
         ))}
       </View>
 
-      {/* フッター情報 */}
-      <View style={styles.footerSection}>
-        <Text style={styles.footerText}>
-          ヒント: タンパク質は1食20-30gが目安です
-        </Text>
+      {/* Tipsセクション */}
+      <View style={styles.tipsSection}>
+        <View style={styles.tipsHeader}>
+          <Ionicons name="bulb-outline" size={16} color="#DC143C" />
+          <Text style={styles.tipsLabel}>たんぱく質Tips</Text>
+        </View>
+        <Text style={styles.tipsText}>{currentTip}</Text>
       </View>
     </ScrollView>
   );
@@ -202,12 +230,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: 'white',
     borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: '#E0E0E0',
     padding: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.05,
     shadowRadius: 8,
-    elevation: 5,
+    elevation: 3,
   },
   searchButtonText: {
     flex: 1,
@@ -233,38 +263,6 @@ const styles = StyleSheet.create({
   seeAllText: {
     fontSize: 14,
     color: '#DC143C',
-  },
-  chainGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginHorizontal: -5,
-  },
-  chainCard: {
-    width: '23%',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    marginHorizontal: '1%',
-    marginBottom: 10,
-    paddingVertical: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 3,
-    elevation: 2,
-  },
-  chainIconPlaceholder: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: '#FFE5E5',
-    marginBottom: 8,
-  },
-  chainName: {
-    fontSize: 11,
-    color: '#333',
-    textAlign: 'center',
-    paddingHorizontal: 2,
   },
   recommendCard: {
     flexDirection: 'row',
@@ -324,13 +322,57 @@ const styles = StyleSheet.create({
     color: '#DC143C',
     marginLeft: 2,
   },
-  footerSection: {
-    padding: 20,
-    alignItems: 'center',
+  tipsSection: {
+    margin: 20,
+    padding: 16,
+    backgroundColor: '#FFF9F9',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#FFE5E5',
   },
-  footerText: {
-    fontSize: 13,
-    color: '#666',
-    textAlign: 'center',
+  tipsHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    gap: 6,
+  },
+  tipsLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#DC143C',
+    letterSpacing: 0.5,
+  },
+  tipsText: {
+    fontSize: 14,
+    color: '#333',
+    lineHeight: 20,
+  },
+  chainListItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 12,
+    padding: 12,
+    marginBottom: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  chainListIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFE5E5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  chainListName: {
+    flex: 1,
+    fontSize: 16,
+    color: '#333',
+    fontWeight: '500',
   },
 });
