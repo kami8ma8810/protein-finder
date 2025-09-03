@@ -9,7 +9,7 @@ import { MenuItem } from '@/core/domain/MenuItem';
 import { ChainInfo } from '@/core/domain/ChainInfo';
 import { MenuRepository } from '@/infrastructure/database/MenuRepository';
 import { DatabaseService } from '@/infrastructure/database/DatabaseService';
-import { MenuApiService } from '@/services/menuApiService';
+import { MenuApiService } from '@/infrastructure/api/MenuApiService';
 import {
   SearchBar,
   LoadingSpinner,
