@@ -30,7 +30,21 @@
       "mcp__serena-mcp-server__find_symbol",
       "mcp__serena-mcp-server__insert_before_symbol",
       "mcp__serena-mcp-server__search_for_pattern",
-      "Bash(git diff:*)"
+      "Bash(git diff:*)",
+      "WebFetch(domain:www.sukiya.jp)",
+      "WebFetch(domain:www.yoshinoya.com)",
+      "Bash(grep:*)",
+      "Bash(sqlite3:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(npm run seed:*)",
+      "Bash(node:*)",
+      "Bash(npx expo run:*)",
+      "Bash(npx expo:*)",
+      "Bash(eas whoami:*)",
+      "Bash(eas build:configure)",
+      "Bash(eas:*)",
+      "Bash(touch:*)",
+      "Bash(npx tsx:*)"
     ],
     "deny": [],
     "ask": []

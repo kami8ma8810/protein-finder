@@ -1,205 +1,152 @@
-/**
- * チェーン店の業態と詳細情報
- */
+import { MenuItem } from '../core/domain/MenuItem';
 
-// 業態の種類
-export type ChainCategory = 
-  | 'beef-bowl'      // 牛丼
-  | 'hamburger'      // ハンバーガー
-  | 'sandwich'       // サンドイッチ
-  | 'family-restaurant' // ファミレス
-  | 'chicken'        // チキン
-  | 'sushi'          // 寿司
-  | 'ramen'          // ラーメン
-  | 'coffee'         // カフェ
-  | 'other';         // その他
-
-// チェーン店の詳細情報
-export interface ChainDetail {
+// メニューアイテムを含むチェーン店情報
+export interface ChainWithMenu {
   id: string;
   name: string;
-  displayName: string;
-  category: ChainCategory;
+  category: string;
+  logoUrl?: string;
   websiteUrl?: string;
-  description?: string;
+  menuItems: MenuItem[];
 }
 
-// チェーン店データ
-export const chainData: Record<string, ChainDetail> = {
-  // 牛丼系
-  sukiya: {
-    id: 'sukiya',
-    name: 'sukiya',
-    displayName: 'すき家',
-    category: 'beef-bowl',
-    websiteUrl: 'https://www.sukiya.jp/',
-    description: '牛丼チェーン最大手'
-  },
-  yoshinoya: {
+// チェーン店データ（配列形式）
+export const chainData: ChainWithMenu[] = [
+  {
     id: 'yoshinoya',
-    name: 'yoshinoya',
-    displayName: '吉野家',
+    name: '吉野家',
     category: 'beef-bowl',
     websiteUrl: 'https://www.yoshinoya.com/',
-    description: '牛丼チェーンの老舗'
+    menuItems: [
+      {
+        id: 'yoshinoya_gyudon_normal',
+        chainId: 'yoshinoya',
+        name: '牛丼（並盛）',
+        category: '丼',
+        proteinG: 20.0,
+        calories: 635,
+        carbsG: 92.8,
+        fatG: 20.4,
+        priceYen: 468,
+        isAvailable: true
+      },
+      {
+        id: 'yoshinoya_gyudon_large',
+        chainId: 'yoshinoya',
+        name: '牛丼（大盛）',
+        category: '丼',
+        proteinG: 25.9,
+        calories: 846,
+        carbsG: 126.6,
+        fatG: 26.0,
+        priceYen: 621,
+        isAvailable: true
+      },
+      {
+        id: 'yoshinoya_gyudon_tokumori',
+        chainId: 'yoshinoya',
+        name: '牛丼（特盛）',
+        category: '丼',
+        proteinG: 35.7,
+        calories: 1063,
+        carbsG: 138.2,
+        fatG: 37.1,
+        priceYen: 765,
+        isAvailable: true
+      },
+      {
+        id: 'yoshinoya_nikudaku',
+        chainId: 'yoshinoya',
+        name: '肉だく牛丼',
+        category: '丼',
+        proteinG: 30.0,
+        calories: 800,
+        carbsG: 93.0,
+        fatG: 30.0,
+        priceYen: 668,
+        isAvailable: true
+      },
+      {
+        id: 'yoshinoya_butadon',
+        chainId: 'yoshinoya',
+        name: '豚丼（並盛）',
+        category: '丼',
+        proteinG: 18.0,
+        calories: 600,
+        carbsG: 85.0,
+        fatG: 18.0,
+        priceYen: 438,
+        isAvailable: true
+      }
+    ]
   },
-  matsuya: {
-    id: 'matsuya',
-    name: 'matsuya',
-    displayName: '松屋',
+  {
+    id: 'sukiya',
+    name: 'すき家',
     category: 'beef-bowl',
-    websiteUrl: 'https://www.matsuyafoods.co.jp/',
-    description: '牛めし・定食チェーン'
-  },
-  nakau: {
-    id: 'nakau',
-    name: 'nakau',
-    displayName: 'なか卯',
-    category: 'beef-bowl',
-    websiteUrl: 'https://www.nakau.co.jp/',
-    description: '親子丼・うどんも提供'
-  },
-  
-  // ハンバーガー系
-  mcdonalds: {
-    id: 'mcdonalds',
-    name: 'mcdonalds',
-    displayName: 'マクドナルド',
-    category: 'hamburger',
-    websiteUrl: 'https://www.mcdonalds.co.jp/',
-    description: '世界最大のハンバーガーチェーン'
-  },
-  mosburger: {
-    id: 'mosburger',
-    name: 'mosburger',
-    displayName: 'モスバーガー',
-    category: 'hamburger',
-    websiteUrl: 'https://www.mos.jp/',
-    description: '日本発のハンバーガーチェーン'
-  },
-  
-  // サンドイッチ
-  subway: {
-    id: 'subway',
-    name: 'subway',
-    displayName: 'サブウェイ',
-    category: 'sandwich',
-    websiteUrl: 'https://www.subway.co.jp/',
-    description: 'カスタマイズできるサンドイッチ'
-  },
-  
-  // ファミレス
-  ootoya: {
-    id: 'ootoya',
-    name: 'ootoya',
-    displayName: '大戸屋',
-    category: 'family-restaurant',
-    websiteUrl: 'https://www.ootoya.com/',
-    description: '定食レストランチェーン'
-  },
-  gusto: {
-    id: 'gusto',
-    name: 'gusto',
-    displayName: 'ガスト',
-    category: 'family-restaurant',
-    websiteUrl: 'https://www.skylark.co.jp/gusto/',
-    description: 'ファミリーレストラン'
-  },
-  
-  // チキン
-  kfc: {
-    id: 'kfc',
-    name: 'kfc',
-    displayName: 'ケンタッキー',
-    category: 'chicken',
-    websiteUrl: 'https://www.kfc.co.jp/',
-    description: 'フライドチキン専門店'
+    websiteUrl: 'https://www.sukiya.jp/',
+    menuItems: [
+      {
+        id: 'sukiya_gyudon_normal',
+        chainId: 'sukiya',
+        name: '牛丼（並盛）',
+        category: '丼',
+        proteinG: 22.9,
+        calories: 733,
+        carbsG: 104.1,
+        fatG: 25.0,
+        priceYen: 400,
+        isAvailable: true
+      },
+      {
+        id: 'sukiya_gyudon_cheese',
+        chainId: 'sukiya',
+        name: 'チーズ牛丼（並盛）',
+        category: '丼',
+        proteinG: 28.6,
+        calories: 867,
+        carbsG: 105.3,
+        fatG: 37.4,
+        priceYen: 530,
+        isAvailable: true
+      },
+      {
+        id: 'sukiya_gyudon_mega',
+        chainId: 'sukiya',
+        name: 'メガ牛丼',
+        category: '丼',
+        proteinG: 48.5,
+        calories: 1458,
+        carbsG: 143.0,
+        fatG: 58.9,
+        priceYen: 780,
+        isAvailable: true
+      },
+      {
+        id: 'sukiya_takana',
+        chainId: 'sukiya',
+        name: '高菜明太マヨ牛丼',
+        category: '丼',
+        proteinG: 24.0,
+        calories: 850,
+        carbsG: 105.0,
+        fatG: 35.0,
+        priceYen: 520,
+        isAvailable: true
+      },
+      {
+        id: 'sukiya_unadon',
+        chainId: 'sukiya',
+        name: 'うな丼（並盛）',
+        category: '丼',
+        proteinG: 25.0,
+        calories: 750,
+        carbsG: 100.0,
+        fatG: 20.0,
+        priceYen: 890,
+        isAvailable: true,
+        isSeasonal: true
+      }
+    ]
   }
-};
-
-// 業態からアイコン情報を取得
-export interface ChainIconInfo {
-  iconFamily: 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons';
-  iconName: string;
-  size: number;
-  color: string;
-}
-
-export const getCategoryIcon = (category: ChainCategory): ChainIconInfo => {
-  switch (category) {
-    case 'beef-bowl':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'rice',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'hamburger':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'hamburger',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'sandwich':
-      return {
-        iconFamily: 'MaterialIcons',
-        iconName: 'lunch-dining',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'family-restaurant':
-      return {
-        iconFamily: 'Ionicons',
-        iconName: 'restaurant',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'chicken':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'food-drumstick',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'sushi':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'fish',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'ramen':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'noodles',
-        size: 24,
-        color: '#DC143C'
-      };
-    case 'coffee':
-      return {
-        iconFamily: 'MaterialCommunityIcons',
-        iconName: 'coffee',
-        size: 24,
-        color: '#DC143C'
-      };
-    default:
-      return {
-        iconFamily: 'Ionicons',
-        iconName: 'restaurant-outline',
-        size: 24,
-        color: '#DC143C'
-      };
-  }
-};
-
-// チェーンIDから詳細情報を取得
-export const getChainDetail = (chainId: string): ChainDetail | undefined => {
-  return chainData[chainId];
-};
-
-// チェーンIDからアイコン情報を取得
-export const getChainIcon = (chainId: string): ChainIconInfo => {
-  const detail = getChainDetail(chainId);
-  return getCategoryIcon(detail?.category || 'other');
-};
+];
