@@ -32,9 +32,22 @@ export class MenuApiService {
       isSeasonal: simple.isSeasonal,
       servingSizeG: simple.servingSizeG,
       allergens: simple.allergens,
-      // MenuItemのメソッドを追加
+      // MenuItemのメソッドとプロパティを追加
       proteinInGrams: simple.proteinG,
+      caloriesInKcal: simple.calories || 0,
       getNutrient: () => undefined,
+      getNutrientInGrams: (type: string) => {
+        switch(type) {
+          case 'protein':
+            return simple.proteinG;
+          case 'fat':
+            return simple.fatG || 0;
+          case 'carbs':
+            return simple.carbsG || 0;
+          default:
+            return 0;
+        }
+      },
     } as any; // 一時的にanyを使用
   }
 
