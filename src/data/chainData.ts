@@ -10,6 +10,14 @@ export interface ChainWithMenu {
   menuItems: MenuItem[];
 }
 
+// アイコン情報のインターフェース
+export interface ChainIconInfo {
+  iconFamily: 'Ionicons' | 'MaterialIcons' | 'MaterialCommunityIcons';
+  iconName: string;
+  size: number;
+  color: string;
+}
+
 // チェーン店データ（配列形式）
 export const chainData: ChainWithMenu[] = [
   {
@@ -150,3 +158,78 @@ export const chainData: ChainWithMenu[] = [
     ]
   }
 ];
+
+// カテゴリーからアイコン情報を取得
+export const getCategoryIcon = (category: string): ChainIconInfo => {
+  switch (category) {
+    case 'beef-bowl':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'rice',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'hamburger':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'hamburger',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'sandwich':
+      return {
+        iconFamily: 'MaterialIcons',
+        iconName: 'lunch-dining',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'family-restaurant':
+      return {
+        iconFamily: 'Ionicons',
+        iconName: 'restaurant',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'chicken':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'food-drumstick',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'sushi':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'fish',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'ramen':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'noodles',
+        size: 24,
+        color: '#DC143C'
+      };
+    case 'coffee':
+      return {
+        iconFamily: 'MaterialCommunityIcons',
+        iconName: 'coffee',
+        size: 24,
+        color: '#DC143C'
+      };
+    default:
+      return {
+        iconFamily: 'Ionicons',
+        iconName: 'restaurant-outline',
+        size: 24,
+        color: '#DC143C'
+      };
+  }
+};
+
+// チェーンIDからアイコン情報を取得
+export const getChainIcon = (chainId: string): ChainIconInfo => {
+  const chain = chainData.find(c => c.id === chainId);
+  return getCategoryIcon(chain?.category || 'other');
+};
