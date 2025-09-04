@@ -29,7 +29,7 @@ export default function HomeScreen() {
 
   const loadHomeData = useCallback(async () => {
     try {
-      const apiService = new MenuApiService();
+      const apiService = MenuApiService.getInstance();
       
       // チェーン店を取得して並び替え
       const chains = await apiService.fetchAvailableChains();
@@ -48,8 +48,12 @@ export default function HomeScreen() {
       // 高タンパクメニューを取得
       const allMenus = await apiService.fetchAllMenus();
       if (allMenus) {
-        // タンパク質が多い順でソート
-        const sorted = [...allMenus.items].sort((a, b) => b.proteinG - a.proteinG);
+        // タンパク質が多い順でソート（既にソート済みだが念のため）
+        const sorted = [...allMenus.items].sort((a, b) => {
+          const aProtein = (a as any).proteinG || a.proteinInGrams || 0;
+          const bProtein = (b as any).proteinG || b.proteinInGrams || 0;
+          return bProtein - aProtein;
+        });
         setRecommendedItems(sorted.slice(0, 5)); // 上位5つ
       }
     } catch (error) {

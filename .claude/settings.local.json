@@ -47,7 +47,8 @@
       "Bash(npx tsx:*)",
       "Bash(npm run ios:*)",
       "Bash(npm run web:*)",
-      "Bash(open http://localhost:8081)"
+      "Bash(open http://localhost:8081)",
+      "Bash(npm run lint:*)"
     ],
     "deny": [],
     "ask": []

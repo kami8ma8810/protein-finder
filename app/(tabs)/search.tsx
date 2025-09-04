@@ -6,7 +6,7 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { MenuItem } from '@/core/domain/MenuItem';
-import { ChainInfo } from '@/core/domain/ChainInfo';
+import { ChainInfo } from '@/core/services/IMenuApiService';
 import { MenuRepository } from '@/infrastructure/database/MenuRepository';
 import { DatabaseService } from '@/infrastructure/database/DatabaseService';
 import { MenuApiService } from '@/infrastructure/api/MenuApiService';
@@ -29,7 +29,7 @@ export default function SearchScreen() {
   useEffect(() => {
     const loadChains = async () => {
       try {
-        const apiService = new MenuApiService();
+        const apiService = MenuApiService.getInstance();
         const result = await apiService.fetchAvailableChains();
         if (result && result.length > 0) {
           setChains(result);

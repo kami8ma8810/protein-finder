@@ -29,7 +29,7 @@ export default function ChainsScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
-  const apiService = useMemo(() => new MenuApiService(), []);
+  const apiService = useMemo(() => MenuApiService.getInstance(), []);
 
   const loadChains = useCallback(async () => {
     try {

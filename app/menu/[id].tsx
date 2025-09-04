@@ -49,7 +49,7 @@ export default function MenuDetailScreen() {
       try {
         // Web版の場合はAPIサービスからモックデータを取得
         if (Platform.OS === 'web' || __DEV__) {
-          const apiService = new MenuApiService();
+          const apiService = MenuApiService.getInstance();
           const allMenus = await apiService.fetchAllMenus();
           if (allMenus) {
             const item = allMenus.items.find(menu => menu.id === id);

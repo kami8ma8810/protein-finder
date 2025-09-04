@@ -1,12 +1,13 @@
 import { MenuItem } from '@/core/domain/MenuItem';
-import { ChainInfo } from '@/core/domain/ChainInfo';
+import { SimpleMenuItem } from '@/core/domain/SimpleMenuItem';
+import { ChainInfo } from '@/core/services/IMenuApiService';
 import { MenuApiResponse } from '@/core/services/IMenuApiService';
 import { chainData } from '@/data/chainData';
 
 export class MenuApiService {
   private static instance: MenuApiService;
 
-  private constructor() {}
+  constructor() {}
 
   static getInstance(): MenuApiService {
     if (!MenuApiService.instance) {
@@ -15,23 +16,47 @@ export class MenuApiService {
     return MenuApiService.instance;
   }
 
+  // SimpleMenuItemからMenuItemクラスへの変換
+  private convertToMenuItem(simple: SimpleMenuItem): MenuItem {
+    return {
+      id: simple.id,
+      chain: simple.chainId,
+      name: simple.name,
+      category: simple.category,
+      proteinG: simple.proteinG,
+      calories: simple.calories,
+      carbsG: simple.carbsG,
+      fatG: simple.fatG,
+      priceYen: simple.priceYen,
+      isAvailable: simple.isAvailable,
+      isSeasonal: simple.isSeasonal,
+      servingSizeG: simple.servingSizeG,
+      allergens: simple.allergens,
+      // MenuItemのメソッドを追加
+      proteinInGrams: simple.proteinG,
+      getNutrient: () => undefined,
+    } as any; // 一時的にanyを使用
+  }
+
   async searchMenuItems(query: string): Promise<MenuItem[]> {
     // シミュレート: API呼び出しの遅延
     await new Promise(resolve => setTimeout(resolve, 300));
 
     const lowercaseQuery = query.toLowerCase();
-    const results: MenuItem[] = [];
+    const results: SimpleMenuItem[] = [];
 
     for (const chain of chainData) {
       const matchingItems = chain.menuItems.filter(item =>
         item.name.toLowerCase().includes(lowercaseQuery) ||
-        item.category.toLowerCase().includes(lowercaseQuery)
+        item.category?.toLowerCase().includes(lowercaseQuery)
       );
       results.push(...matchingItems);
     }
 
-    // たんぱく質量でソート（降順）
-    return results.sort((a, b) => b.proteinG - a.proteinG);
+    // たんぱく質量でソート（降順）してMenuItemに変換
+    return results
+      .sort((a, b) => b.proteinG - a.proteinG)
+      .map(item => this.convertToMenuItem(item));
   }
 
   async getMenuItemsByChainId(chainId: string): Promise<MenuItem[]> {
@@ -39,7 +64,7 @@ export class MenuApiService {
     await new Promise(resolve => setTimeout(resolve, 200));
 
     const chain = chainData.find(c => c.id === chainId);
-    return chain ? [...chain.menuItems] : [];
+    return chain ? chain.menuItems.map(item => this.convertToMenuItem(item)) : [];
   }
 
   async getChainInfo(chainId: string): Promise<ChainInfo | null> {
@@ -52,7 +77,7 @@ export class MenuApiService {
     return {
       id: chain.id,
       name: chain.name,
-      category: chain.category,
+      displayName: chain.name,
       logoUrl: chain.logoUrl,
       websiteUrl: chain.websiteUrl,
     };
@@ -66,7 +91,6 @@ export class MenuApiService {
       id: chain.id,
       name: chain.name,
       displayName: chain.name, // displayNameも追加
-      category: chain.category,
       logoUrl: chain.logoUrl,
       websiteUrl: chain.websiteUrl,
     }));
@@ -78,13 +102,17 @@ export class MenuApiService {
   }
 
   async fetchAllMenus(): Promise<MenuApiResponse> {
-    const allItems: MenuItem[] = [];
+    const allItems: SimpleMenuItem[] = [];
     for (const chain of chainData) {
       allItems.push(...chain.menuItems);
     }
     
+    const sortedItems = allItems
+      .sort((a, b) => b.proteinG - a.proteinG)
+      .map(item => this.convertToMenuItem(item));
+    
     return {
-      items: allItems.sort((a, b) => b.proteinG - a.proteinG),
+      items: sortedItems,
       etag: 'mock-etag-' + Date.now(),
       lastModified: new Date().toISOString()
     };
@@ -92,29 +120,35 @@ export class MenuApiService {
 
   async fetchMenusByChain(
     chainId: string,
-    options?: { sortBy?: string; order?: 'asc' | 'desc' }
-  ): Promise<MenuItem[]> {
+    options?: { sortBy?: string; order?: 'asc' | 'desc'; forceRefresh?: boolean }
+  ): Promise<MenuApiResponse> {
     const items = await this.getMenuItemsByChainId(chainId);
     
+    let sortedItems = items;
     if (options?.sortBy === 'protein' && options?.order === 'desc') {
-      return items.sort((a, b) => b.proteinG - a.proteinG);
+      sortedItems = items.sort((a, b) => (b as any).proteinG - (a as any).proteinG);
     }
     
-    return items;
+    return {
+      items: sortedItems,
+      etag: 'mock-etag-' + Date.now(),
+      lastModified: new Date().toISOString()
+    };
   }
 
   async getTopProteinItems(limit: number = 10): Promise<MenuItem[]> {
     // シミュレート: API呼び出しの遅延
     await new Promise(resolve => setTimeout(resolve, 200));
 
-    const allItems: MenuItem[] = [];
+    const allItems: SimpleMenuItem[] = [];
     for (const chain of chainData) {
       allItems.push(...chain.menuItems);
     }
 
     return allItems
       .sort((a, b) => b.proteinG - a.proteinG)
-      .slice(0, limit);
+      .slice(0, limit)
+      .map(item => this.convertToMenuItem(item));
   }
 
   async getMenuItemById(itemId: string): Promise<MenuItem | null> {
@@ -123,7 +157,7 @@ export class MenuApiService {
 
     for (const chain of chainData) {
       const item = chain.menuItems.find(item => item.id === itemId);
-      if (item) return item;
+      if (item) return this.convertToMenuItem(item);
     }
     return null;
   }
@@ -132,7 +166,7 @@ export class MenuApiService {
     // シミュレート: API呼び出しの遅延
     await new Promise(resolve => setTimeout(resolve, 200));
 
-    const results: MenuItem[] = [];
+    const results: SimpleMenuItem[] = [];
     const lowercaseCategory = category.toLowerCase();
 
     for (const chain of chainData) {
@@ -142,14 +176,16 @@ export class MenuApiService {
       results.push(...matchingItems);
     }
 
-    return results.sort((a, b) => b.proteinG - a.proteinG);
+    return results
+      .sort((a, b) => b.proteinG - a.proteinG)
+      .map(item => this.convertToMenuItem(item));
   }
 
   async getMenuItemsByProteinRange(minProtein: number, maxProtein?: number): Promise<MenuItem[]> {
     // シミュレート: API呼び出しの遅延
     await new Promise(resolve => setTimeout(resolve, 200));
 
-    const results: MenuItem[] = [];
+    const results: SimpleMenuItem[] = [];
 
     for (const chain of chainData) {
       const matchingItems = chain.menuItems.filter(item => {
@@ -161,6 +197,14 @@ export class MenuApiService {
       results.push(...matchingItems);
     }
 
-    return results.sort((a, b) => b.proteinG - a.proteinG);
+    return results
+      .sort((a, b) => b.proteinG - a.proteinG)
+      .map(item => this.convertToMenuItem(item));
+  }
+  
+  // キャッシュクリア（互換性のため）
+  async clearCache(): Promise<void> {
+    // モックなので何もしない
+    return Promise.resolve();
   }
 }

@@ -1,4 +1,4 @@
-import { MenuItem } from '../core/domain/MenuItem';
+import { SimpleMenuItem } from '../core/domain/SimpleMenuItem';
 
 // メニューアイテムを含むチェーン店情報
 export interface ChainWithMenu {
@@ -7,7 +7,7 @@ export interface ChainWithMenu {
   category: string;
   logoUrl?: string;
   websiteUrl?: string;
-  menuItems: MenuItem[];
+  menuItems: SimpleMenuItem[];
 }
 
 // アイコン情報のインターフェース

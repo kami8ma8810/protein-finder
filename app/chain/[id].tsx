@@ -33,7 +33,7 @@ export default function ChainMenuScreen() {
     async (forceRefresh = false) => {
       try {
         // まずAPIから取得を試みる
-        const apiService = new MenuApiService();
+        const apiService = MenuApiService.getInstance();
         const apiResponse = await apiService.fetchMenusByChain(id, {
           forceRefresh,
         });
