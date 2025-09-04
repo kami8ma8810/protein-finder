@@ -49,7 +49,7 @@ export default function HomeScreen() {
       const allMenus = await apiService.fetchAllMenus();
       if (allMenus) {
         // タンパク質が多い順でソート
-        const sorted = [...allMenus.items].sort((a, b) => b.proteinInGrams - a.proteinInGrams);
+        const sorted = [...allMenus.items].sort((a, b) => b.proteinG - a.proteinG);
         setRecommendedItems(sorted.slice(0, 5)); // 上位5つ
       }
     } catch (error) {

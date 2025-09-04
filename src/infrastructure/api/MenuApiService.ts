@@ -1,5 +1,6 @@
 import { MenuItem } from '@/core/domain/MenuItem';
 import { ChainInfo } from '@/core/domain/ChainInfo';
+import { MenuApiResponse } from '@/core/services/IMenuApiService';
 import { chainData } from '@/data/chainData';
 
 export class MenuApiService {
@@ -64,6 +65,7 @@ export class MenuApiService {
     return chainData.map(chain => ({
       id: chain.id,
       name: chain.name,
+      displayName: chain.name, // displayNameも追加
       category: chain.category,
       logoUrl: chain.logoUrl,
       websiteUrl: chain.websiteUrl,
@@ -75,12 +77,17 @@ export class MenuApiService {
     return this.getAllChains();
   }
 
-  async fetchAllMenus(): Promise<MenuItem[]> {
+  async fetchAllMenus(): Promise<MenuApiResponse> {
     const allItems: MenuItem[] = [];
     for (const chain of chainData) {
       allItems.push(...chain.menuItems);
     }
-    return allItems.sort((a, b) => b.proteinG - a.proteinG);
+    
+    return {
+      items: allItems.sort((a, b) => b.proteinG - a.proteinG),
+      etag: 'mock-etag-' + Date.now(),
+      lastModified: new Date().toISOString()
+    };
   }
 
   async fetchMenusByChain(

@@ -44,7 +44,10 @@
       "Bash(eas build:configure)",
       "Bash(eas:*)",
       "Bash(touch:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "Bash(npm run ios:*)",
+      "Bash(npm run web:*)",
+      "Bash(open http://localhost:8081)"
     ],
     "deny": [],
     "ask": []
