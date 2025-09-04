@@ -209,12 +209,14 @@
         "npm:@react-native-async-storage/async-storage@^2.2.0",
         "npm:@testing-library/react-hooks@^8.0.1",
         "npm:@testing-library/react-native@^13.3.3",
+        "npm:@types/better-sqlite3@^7.6.13",
         "npm:@types/jest@30",
         "npm:@types/react-native@~0.72.8",
         "npm:@types/react@^19.1.12",
         "npm:@typescript-eslint/eslint-plugin@^8.41.0",
         "npm:@typescript-eslint/parser@^8.41.0",
         "npm:babel-preset-expo@^13.2.4",
+        "npm:better-sqlite3@^12.2.0",
         "npm:eslint-config-expo@^9.2.0",
         "npm:eslint-config-prettier@^10.1.8",
         "npm:eslint-plugin-prettier@^5.5.4",
@@ -243,6 +245,7 @@
         "npm:react@19.0.0",
         "npm:ts-jest@^29.4.1",
         "npm:ts-node@^10.9.2",
+        "npm:tsx@^4.20.5",
         "npm:typescript@^5.9.2"
       ]
     }

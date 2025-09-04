@@ -70,6 +70,32 @@ export class MenuApiService {
     }));
   }
 
+  // 互換性のためのエイリアス
+  async fetchAvailableChains(): Promise<ChainInfo[]> {
+    return this.getAllChains();
+  }
+
+  async fetchAllMenus(): Promise<MenuItem[]> {
+    const allItems: MenuItem[] = [];
+    for (const chain of chainData) {
+      allItems.push(...chain.menuItems);
+    }
+    return allItems.sort((a, b) => b.proteinG - a.proteinG);
+  }
+
+  async fetchMenusByChain(
+    chainId: string,
+    options?: { sortBy?: string; order?: 'asc' | 'desc' }
+  ): Promise<MenuItem[]> {
+    const items = await this.getMenuItemsByChainId(chainId);
+    
+    if (options?.sortBy === 'protein' && options?.order === 'desc') {
+      return items.sort((a, b) => b.proteinG - a.proteinG);
+    }
+    
+    return items;
+  }
+
   async getTopProteinItems(limit: number = 10): Promise<MenuItem[]> {
     // シミュレート: API呼び出しの遅延
     await new Promise(resolve => setTimeout(resolve, 200));
