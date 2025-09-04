@@ -73,30 +73,16 @@ export default function MenuDetailScreen() {
     loadMenuItem();
   }, [id]);
 
-  if (loading) {
-    return (
-      <View style={styles.centerContainer}>
-        <ActivityIndicator size="large" color="#DC143C" />
-      </View>
-    );
-  }
-
-  if (!menuItem) {
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.errorText}>メニュー情報が見つかりません</Text>
-      </View>
-    );
-  }
-
+  // ヘルパー関数
   const getNutrientValue = (type: 'fat' | 'carbs' | 'energy') => {
+    if (!menuItem) return '-';
     if (type === 'energy') {
-      return menuItem.getNutrient('energy')?.value || '-';
+      return menuItem.getNutrient?.('energy')?.value || '-';
     }
-    return menuItem.getNutrientInGrams(type) || '-';
+    return menuItem.getNutrientInGrams?.(type) || '-';
   };
 
-  // 共有機能
+  // 共有機能（フックは早期リターンの前に定義する必要がある）
   const handleShare = useCallback(async () => {
     if (!menuItem) return;
 
@@ -124,7 +110,23 @@ export default function MenuDetailScreen() {
     } else {
       Alert.alert('エラー', 'URLを開けませんでした');
     }
-  }, [menuItem]);
+  }, [menuItem, getNutrientValue]);
+
+  if (loading) {
+    return (
+      <View style={styles.centerContainer}>
+        <ActivityIndicator size="large" color="#DC143C" />
+      </View>
+    );
+  }
+
+  if (!menuItem) {
+    return (
+      <View style={styles.centerContainer}>
+        <Text style={styles.errorText}>メニュー情報が見つかりません</Text>
+      </View>
+    );
+  }
 
   return (
     <>

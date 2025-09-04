@@ -35,7 +35,12 @@ export class MenuApiService {
       // MenuItemのメソッドとプロパティを追加
       proteinInGrams: simple.proteinG,
       caloriesInKcal: simple.calories || 0,
-      getNutrient: () => undefined,
+      getNutrient: (type: string) => {
+        if (type === 'energy' || type === 'calories') {
+          return { value: simple.calories || 0, unit: 'kcal', type: 'calories' };
+        }
+        return undefined;
+      },
       getNutrientInGrams: (type: string) => {
         switch(type) {
           case 'protein':
